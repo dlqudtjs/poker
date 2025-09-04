@@ -1,4 +1,4 @@
-package mong.poker.core.user.domain
+package mong.poker.core.domain.user.domain
 
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
@@ -28,4 +28,19 @@ class User(
 
     @Column(name = "deleted_at")
     val deletedAt: LocalDateTime?,
-)
+) {
+    companion object {
+        fun create(
+            nickname: String,
+            balanceAmount: Long = 0,
+            createdAt: LocalDateTime,
+        ) = User(
+            id = UUID.randomUUID(),
+            nickname = nickname,
+            balanceAmount = balanceAmount,
+            createdAt = createdAt,
+            updatedAt = null,
+            deletedAt = null,
+        )
+    }
+}

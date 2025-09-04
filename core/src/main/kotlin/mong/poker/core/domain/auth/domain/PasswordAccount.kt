@@ -1,7 +1,7 @@
-package mong.poker.core.auth.domain
+package mong.poker.core.domain.auth.domain
 
 import jakarta.persistence.*
-import mong.poker.core.user.domain.User
+import mong.poker.core.domain.user.domain.User
 import java.time.LocalDateTime
 import java.util.*
 
