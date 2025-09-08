@@ -1,8 +1,7 @@
 package mong.poker.global.response
 
-import mong.poker.global.exception.CustomException
-import mong.poker.global.exception.ErrorType
-import org.springframework.http.HttpStatus
+import mong.poker.application.global.support.exception.CustomException
+import mong.poker.application.global.support.exception.ErrorType
 
 /**
  * API 의 일관된 응답을 주기 위한 클래스
@@ -10,7 +9,7 @@ import org.springframework.http.HttpStatus
 sealed class ApiResponse<T> {
     data class Success<T>(val data: T?) : ApiResponse<T>()
     data class SuccessList<T>(val pageSize: Int, val page: Int, val data: List<T>) : ApiResponse<T>()
-    data class Error<T>(val status: HttpStatus, val message: String) : ApiResponse<Nothing>()
+    data class Error<T>(val status: Int, val message: String) : ApiResponse<Nothing>()
 
     companion object {
         fun <T> success(data: T?) = Success(data)

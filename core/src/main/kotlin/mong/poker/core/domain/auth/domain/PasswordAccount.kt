@@ -30,4 +30,21 @@ class PasswordAccount(
 
     @Column(name = "deleted_at")
     val deletedAt: LocalDateTime?,
-)
+) {
+    companion object {
+        fun create(
+            user: User,
+            accountId: String,
+            password: String,
+            createdAt: LocalDateTime,
+        ) = PasswordAccount(
+            id = UUID.randomUUID(),
+            user = user,
+            accountId = accountId,
+            password = password,
+            createdAt = createdAt,
+            updatedAt = null,
+            deletedAt = null,
+        )
+    }
+}

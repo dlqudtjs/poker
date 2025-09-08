@@ -6,6 +6,7 @@ build/
 !**/src/test/**/build/
 
 resources/
+infrastructure/
 
 ### STS ###
 .apt_generated
