@@ -1,7 +1,9 @@
 package mong.poker.domain.user.controller
 
 import jakarta.validation.Valid
-import mong.poker.application.domain.user.usecase.SignUnUpUseCase
+import mong.poker.application.domain.user.usecase.SignInUseCase
+import mong.poker.application.domain.user.usecase.SignUpUseCase
+import mong.poker.domain.user.controller.request.SignInRequest
 import mong.poker.domain.user.controller.request.SignUpRequest
 import mong.poker.global.response.ApiResponse
 import org.springframework.http.HttpStatus
@@ -16,14 +18,15 @@ import java.util.*
 @RestController
 @RequestMapping("/api/v1/users")
 class UserController(
-    private val signInUpUseCase: SignUnUpUseCase
+    private val signUpUseCase: SignUpUseCase,
+    private val signInUseCase: SignInUseCase
 ) {
     @PostMapping("/signup")
     fun signUp(
         @RequestBody @Valid request: SignUpRequest
     ): ResponseEntity<ApiResponse<UUID>> {
-        val response = signInUpUseCase.execute(
-            request = SignUnUpUseCase.Request(
+        val response = signUpUseCase.execute(
+            request = SignUpUseCase.Request(
                 accountId = request.accountId,
                 password = request.password,
                 nickname = request.nickname,
@@ -34,5 +37,20 @@ class UserController(
         return ResponseEntity
             .status(HttpStatus.CREATED)
             .body(ApiResponse.success(response.id))
+    }
+
+    @PostMapping("/signin")
+    fun signIn(
+        @RequestBody @Valid request: SignInRequest
+    ): ResponseEntity<ApiResponse<String>> {
+        val response = signInUseCase.execute(
+            request = SignInUseCase.Request(
+                accountId = request.accountId,
+                password = request.password,
+            ),
+            executedAt = LocalDateTime.now()
+        )
+
+        return ResponseEntity.ok(ApiResponse.success(response.token))
     }
 }

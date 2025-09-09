@@ -12,22 +12,22 @@ import java.util.*
 class User(
 
     @Id
-    val id: UUID,
+    private val id: UUID,
 
     @Column(name = "nickname", nullable = false)
-    val nickname: String,
+    private val nickname: String,
 
     @Column(name = "balance_amount", nullable = false)
-    val balanceAmount: Long,
+    private val balanceAmount: Long,
 
     @Column(name = "created_at", nullable = false)
-    val createdAt: LocalDateTime,
+    private val createdAt: LocalDateTime,
 
     @Column(name = "updated_at")
-    val updatedAt: LocalDateTime?,
+    private val updatedAt: LocalDateTime?,
 
     @Column(name = "deleted_at")
-    val deletedAt: LocalDateTime?,
+    private val deletedAt: LocalDateTime?,
 ) {
     companion object {
         fun create(
@@ -42,5 +42,9 @@ class User(
             updatedAt = null,
             deletedAt = null,
         )
+    }
+
+    fun getId(): UUID {
+        return id
     }
 }

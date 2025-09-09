@@ -31,4 +31,13 @@ class PasswordAccountService(
             )
         )
     }
+
+    fun existByAccountId(accountId: String): Boolean {
+        return passwordAccountRepository.existsByAccountId(accountId)
+    }
+
+    @Transactional(readOnly = true, propagation = Propagation.REQUIRED)
+    fun getAccountByAccountId(accountId: String): PasswordAccount? {
+        return passwordAccountRepository.findByAccountId(accountId)
+    }
 }

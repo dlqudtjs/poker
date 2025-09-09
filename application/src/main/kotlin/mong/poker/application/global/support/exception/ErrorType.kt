@@ -7,6 +7,8 @@ enum class ErrorType(
 ) {
     // user 관련
     DUPLICATED_NICKNAME(400, "Duplicated nickname"),
+    DUPLICATED_ACCOUNT_ID(400, "Duplicated account id"),
+    INVALID_LOGIN_INFO(400, "Invalid login info"),
 
 
     UNCAUGHT_EXCEPTION(500, "Uncaught exception"),

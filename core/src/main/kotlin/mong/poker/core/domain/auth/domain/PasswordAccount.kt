@@ -10,26 +10,26 @@ import java.util.*
 class PasswordAccount(
 
     @Id
-    val id: UUID,
+    private val id: UUID,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
-    val user: User,
+    private val user: User,
 
     @Column(name = "account_id", nullable = false)
-    val accountId: String,
+    private val accountId: String,
 
     @Column(name = "password", nullable = false)
-    val password: String,
+    private val password: String,
 
     @Column(name = "created_at", nullable = false)
-    val createdAt: LocalDateTime,
+    private val createdAt: LocalDateTime,
 
     @Column(name = "updated_at")
-    val updatedAt: LocalDateTime?,
+    private val updatedAt: LocalDateTime?,
 
     @Column(name = "deleted_at")
-    val deletedAt: LocalDateTime?,
+    private val deletedAt: LocalDateTime?,
 ) {
     companion object {
         fun create(
@@ -46,5 +46,13 @@ class PasswordAccount(
             updatedAt = null,
             deletedAt = null,
         )
+    }
+
+    fun getPassword(): String {
+        return password
+    }
+
+    fun getUser(): User {
+        return user
     }
 }

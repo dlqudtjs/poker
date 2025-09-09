@@ -5,6 +5,7 @@ import mong.poker.application.domain.user.service.UserService
 import mong.poker.application.global.support.exception.CustomException
 import mong.poker.application.global.support.exception.ErrorType
 import mong.poker.application.global.support.usecase.UseCase
+import mong.poker.lib.encrypt.PasswordEncoder
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Propagation
 import org.springframework.transaction.annotation.Transactional
@@ -12,16 +13,21 @@ import java.time.LocalDateTime
 import java.util.*
 
 @Component
-class SignUnUpUseCase(
+class SignUpUseCase(
     private val userService: UserService,
-    private val passwordAccountService: PasswordAccountService
-) : UseCase<SignUnUpUseCase.Request, SignUnUpUseCase.Response> {
+    private val passwordAccountService: PasswordAccountService,
+    private val passwordEncoder: PasswordEncoder
+) : UseCase<SignUpUseCase.Request, SignUpUseCase.Response> {
 
     @Transactional(propagation = Propagation.REQUIRED)
     override fun execute(
         request: Request,
         executedAt: LocalDateTime,
     ): Response {
+        if (passwordAccountService.existByAccountId(request.accountId)) {
+            throw CustomException(ErrorType.DUPLICATED_ACCOUNT_ID)
+        }
+
         if (userService.existByNickname(request.nickname)) {
             throw CustomException(ErrorType.DUPLICATED_NICKNAME)
         }
@@ -38,7 +44,7 @@ class SignUnUpUseCase(
             executedAt = executedAt,
         )
 
-        return Response(id = user.id)
+        return Response(id = user.getId())
     }
 
     data class Request(
