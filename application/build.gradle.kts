@@ -8,6 +8,7 @@ plugins {
 
 dependencies {
     implementation(project(":core"))
+    implementation(project(":lib"))
 
     implementation("org.springframework.boot:spring-boot-starter")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")

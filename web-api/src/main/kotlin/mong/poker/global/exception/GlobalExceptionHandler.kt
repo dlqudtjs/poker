@@ -4,16 +4,13 @@ import mong.poker.application.global.support.exception.CustomException
 import mong.poker.application.global.support.exception.ErrorType
 import mong.poker.global.response.ApiResponse
 import org.apache.logging.log4j.LogManager
-import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
-import org.springframework.http.HttpStatusCode
 import org.springframework.http.ResponseEntity
 import org.springframework.http.converter.HttpMessageNotReadableException
+import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
-import org.springframework.web.context.request.WebRequest
 import org.springframework.web.servlet.NoHandlerFoundException
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler
 
 /**
  * REST 컨트롤러에서 발생하는 예외를 전역적으로 처리하는 핸들러 클래스
@@ -22,7 +19,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
  * 예외를 이 핸들러로 모아, 일관된 에러 응답을 반환
  */
 @RestControllerAdvice
-class GlobalExceptionHandler : ResponseEntityExceptionHandler() {
+class GlobalExceptionHandler {
     companion object {
         private val log = LogManager.getLogger(GlobalExceptionHandler::class.java)
     }
@@ -53,34 +50,55 @@ class GlobalExceptionHandler : ResponseEntityExceptionHandler() {
             .body(response)
     }
 
-    // 400 Bad Request (JSON 형식이 잘못된 경우)
-    override fun handleHttpMessageNotReadable(
-        e: HttpMessageNotReadableException,
-        headers: HttpHeaders,
-        status: HttpStatusCode,
-        request: WebRequest,
-    ): ResponseEntity<Any> {
+    @ExceptionHandler(MethodArgumentNotValidException::class)
+    fun handleValidationExceptions(e: MethodArgumentNotValidException): ResponseEntity<ApiResponse.Error<Nothing>> {
         printErrorMessage(e)
+
+        // 첫 번째 필드 에러 메시지를 가져오기
+        val firstErrorMessage = e.bindingResult
+            .fieldErrors
+            .firstOrNull()
+            ?.defaultMessage ?: "잘못된 요청입니다."
+
+        val response = ApiResponse.error<Nothing>(
+            status = HttpStatus.BAD_REQUEST.value(),
+            message = firstErrorMessage
+        )
+
+        return ResponseEntity
+            .status(HttpStatus.BAD_REQUEST)
+            .body(response)
+    }
+
+    // JSON 파싱 오류
+    @ExceptionHandler(HttpMessageNotReadableException::class)
+    fun handleHttpMessageNotReadableException(
+        ex: HttpMessageNotReadableException
+    ): ResponseEntity<ApiResponse.Error<Nothing>> {
+        printErrorMessage(ex)
 
         val response = ApiResponse.error<Nothing>(
             errorType = ErrorType.BAD_REQUEST,
         )
 
-        return ResponseEntity.badRequest().body(response)
+        return ResponseEntity
+            .status(HttpStatus.BAD_REQUEST)
+            .body(response)
     }
 
-    // 404 Not Found
-    override fun handleNoHandlerFoundException(
-        ex: NoHandlerFoundException,
-        headers: HttpHeaders,
-        status: HttpStatusCode,
-        request: WebRequest,
-    ): ResponseEntity<Any>? {
-        val response =
-            ApiResponse.error<Nothing>(
-                ErrorType.NOT_FOUND,
-            )
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response)
+    // 404 Not Found 에러 처리
+    @ExceptionHandler(NoHandlerFoundException::class)
+    fun handleNoHandlerFoundException(
+        ex: NoHandlerFoundException
+    ): ResponseEntity<ApiResponse.Error<Nothing>> {
+        printErrorMessage(ex)
+        val response = ApiResponse.error<Nothing>(
+            errorType = ErrorType.NOT_FOUND,
+        )
+
+        return ResponseEntity
+            .status(HttpStatus.NOT_FOUND)
+            .body(response)
     }
 
     /**

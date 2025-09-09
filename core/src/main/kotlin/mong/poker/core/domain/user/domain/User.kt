@@ -14,7 +14,7 @@ class User(
     @Id
     val id: UUID,
 
-    @Column(name = "ninkname", nullable = false)
+    @Column(name = "nickname", nullable = false)
     val nickname: String,
 
     @Column(name = "balance_amount", nullable = false)

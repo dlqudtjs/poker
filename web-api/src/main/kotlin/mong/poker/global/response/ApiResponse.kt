@@ -29,5 +29,9 @@ sealed class ApiResponse<T> {
         fun <T> error(exception: CustomException): Error<T> {
             return Error(exception.errorType.status, exception.errorType.message)
         }
+
+        fun <T> error(status: Int, message: String): Error<T> {
+            return Error(status, message)
+        }
     }
 }
