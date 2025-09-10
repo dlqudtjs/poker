@@ -3,7 +3,7 @@ package mong.poker.webapi.global.exception
 import jakarta.servlet.http.HttpServletResponse
 import mong.poker.application.global.support.exception.CustomException
 import mong.poker.application.global.support.exception.ErrorType
-import mong.poker.global.util.ExceptionUtil
+import mong.poker.webapi.global.util.ExceptionUtil
 import org.apache.logging.log4j.LogManager
 
 /**

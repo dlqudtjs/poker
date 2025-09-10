@@ -2,7 +2,7 @@ package mong.poker.webapi.global.exception
 
 import mong.poker.application.global.support.exception.CustomException
 import mong.poker.application.global.support.exception.ErrorType
-import mong.poker.global.response.ApiResponse
+import mong.poker.webapi.global.response.ApiResponse
 import org.apache.logging.log4j.LogManager
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity

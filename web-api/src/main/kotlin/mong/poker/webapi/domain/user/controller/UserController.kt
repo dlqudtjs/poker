@@ -3,9 +3,9 @@ package mong.poker.webapi.domain.user.controller
 import jakarta.validation.Valid
 import mong.poker.application.domain.user.usecase.SignInUseCase
 import mong.poker.application.domain.user.usecase.SignUpUseCase
-import mong.poker.domain.user.controller.request.SignInRequest
-import mong.poker.domain.user.controller.request.SignUpRequest
-import mong.poker.global.response.ApiResponse
+import mong.poker.webapi.domain.user.controller.request.SignInRequest
+import mong.poker.webapi.domain.user.controller.request.SignUpRequest
+import mong.poker.webapi.global.response.ApiResponse
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
