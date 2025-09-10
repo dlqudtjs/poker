@@ -1,4 +1,4 @@
-package mong.poker.domain.user.controller
+package mong.poker.webapi.domain.user.controller
 
 import jakarta.validation.Valid
 import mong.poker.application.domain.user.usecase.SignInUseCase

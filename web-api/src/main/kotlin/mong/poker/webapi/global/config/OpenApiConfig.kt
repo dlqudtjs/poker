@@ -1,4 +1,4 @@
-package mong.poker.global.config
+package mong.poker.webapi.global.config
 
 import io.swagger.v3.oas.models.Components
 import io.swagger.v3.oas.models.OpenAPI

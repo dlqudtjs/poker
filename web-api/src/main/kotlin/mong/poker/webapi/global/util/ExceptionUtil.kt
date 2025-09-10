@@ -1,4 +1,4 @@
-package mong.poker.global.util
+package mong.poker.webapi.global.util
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import jakarta.servlet.http.HttpServletResponse

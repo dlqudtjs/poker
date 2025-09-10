@@ -1,4 +1,4 @@
-package mong.poker.global.config
+package mong.poker.webapi.global.config
 
 import org.springframework.context.annotation.Configuration
 import org.springframework.web.servlet.config.annotation.CorsRegistry

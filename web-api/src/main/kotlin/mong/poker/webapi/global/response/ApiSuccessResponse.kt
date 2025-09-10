@@ -1,4 +1,4 @@
-package mong.poker.global.response
+package mong.poker.webapi.global.response
 
 class ApiSuccessResponse(
     val data: Any?,

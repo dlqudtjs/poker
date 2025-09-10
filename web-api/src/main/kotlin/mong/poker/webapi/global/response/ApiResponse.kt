@@ -1,4 +1,4 @@
-package mong.poker.global.response
+package mong.poker.webapi.global.response
 
 import mong.poker.application.global.support.exception.CustomException
 import mong.poker.application.global.support.exception.ErrorType
