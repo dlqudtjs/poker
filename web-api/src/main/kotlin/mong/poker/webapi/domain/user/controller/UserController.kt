@@ -5,13 +5,11 @@ import mong.poker.application.domain.user.usecase.SignInUseCase
 import mong.poker.application.domain.user.usecase.SignUpUseCase
 import mong.poker.webapi.domain.user.controller.request.SignInRequest
 import mong.poker.webapi.domain.user.controller.request.SignUpRequest
+import mong.poker.webapi.global.auth.ApiRequiredAuth
 import mong.poker.webapi.global.response.ApiResponse
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 import java.time.LocalDateTime
 import java.util.*
 
@@ -52,5 +50,13 @@ class UserController(
         )
 
         return ResponseEntity.ok(ApiResponse.success(response.token))
+    }
+
+    @GetMapping("/me")
+    fun getMe(
+        @ApiRequiredAuth id: String,
+    ): ResponseEntity<ApiResponse<String>> {
+        println(id)
+        return ResponseEntity.ok(ApiResponse.success("me"))
     }
 }

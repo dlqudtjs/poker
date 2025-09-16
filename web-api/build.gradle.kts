@@ -9,6 +9,7 @@ dependencies {
     implementation(project(":socket-adapter"))
     implementation(project(":application"))
     implementation(project(":core"))
+    implementation(project(":lib"))
 
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-validation")

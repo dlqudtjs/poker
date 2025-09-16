@@ -1,7 +1,7 @@
 package mong.poker.socketadapter.support.global.config
 
 import TokenManager
-import mong.poker.socketadapter.support.global.auth.AuthContext
+import mong.poker.socketadapter.support.global.auth.SocketAuthContext
 import org.springframework.http.server.ServerHttpRequest
 import org.springframework.http.server.ServerHttpResponse
 import org.springframework.stereotype.Component
@@ -10,7 +10,7 @@ import org.springframework.web.socket.server.HandshakeInterceptor
 
 @Component
 class WebSocketAuthInterceptor(
-    private val authContext: AuthContext,
+    private val socketAuthContext: SocketAuthContext,
     private val tokenManager: TokenManager,
 ) : HandshakeInterceptor {
 
@@ -26,7 +26,7 @@ class WebSocketAuthInterceptor(
             return false
         }
 
-        authContext.id = userId
+        socketAuthContext.id = userId
         return true
     }
 
@@ -36,7 +36,7 @@ class WebSocketAuthInterceptor(
         wsHandler: WebSocketHandler,
         exception: Exception?,
     ) {
-        authContext.clear()
+        socketAuthContext.clear()
     }
 
     private fun extractUserFromJwt(request: ServerHttpRequest): String? {

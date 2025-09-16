@@ -5,7 +5,7 @@ import org.springframework.web.context.annotation.RequestScope
 
 @RequestScope
 @Component
-class AuthContext {
+class SocketAuthContext {
     var id: String? = null
 
     fun set(id: String?) {

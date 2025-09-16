@@ -14,4 +14,5 @@ enum class ErrorType(
     UNCAUGHT_EXCEPTION(500, "Uncaught exception"),
     BAD_REQUEST(400, "Bad request"),
     NOT_FOUND(404, "Not found"),
+    UNAUTHORIZED(401, "Unauthorized"),
 }
