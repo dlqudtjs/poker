@@ -47,4 +47,8 @@ class User(
     fun getId(): UUID {
         return id
     }
+
+    fun getNickname(): String {
+        return nickname
+    }
 }

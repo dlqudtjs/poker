@@ -7,6 +7,7 @@ import org.springframework.http.HttpMethod
 import org.springframework.stereotype.Component
 import org.springframework.web.cors.CorsUtils
 import org.springframework.web.servlet.HandlerInterceptor
+import java.util.*
 
 @Component
 class AuthInterceptor(
@@ -29,7 +30,7 @@ class AuthInterceptor(
         }
 
         val userId = extractUserFromJwt(request)
-        socketAuthContext.id = userId
+        socketAuthContext.id = UUID.fromString(userId)
 
         return true
     }

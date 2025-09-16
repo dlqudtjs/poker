@@ -1,6 +1,7 @@
 package mong.poker.webapi.domain.user.controller
 
 import jakarta.validation.Valid
+import mong.poker.application.domain.user.usecase.GetMyProfileUseCase
 import mong.poker.application.domain.user.usecase.SignInUseCase
 import mong.poker.application.domain.user.usecase.SignUpUseCase
 import mong.poker.webapi.domain.user.controller.request.SignInRequest
@@ -17,7 +18,8 @@ import java.util.*
 @RequestMapping("/api/v1/users")
 class UserController(
     private val signUpUseCase: SignUpUseCase,
-    private val signInUseCase: SignInUseCase
+    private val signInUseCase: SignInUseCase,
+    private val getMyProfileUseCase: GetMyProfileUseCase,
 ) {
     @PostMapping("/signup")
     fun signUp(
@@ -54,9 +56,15 @@ class UserController(
 
     @GetMapping("/me")
     fun getMe(
-        @ApiRequiredAuth id: String,
+        @ApiRequiredAuth id: UUID,
     ): ResponseEntity<ApiResponse<String>> {
-        println(id)
-        return ResponseEntity.ok(ApiResponse.success("me"))
+        val response = getMyProfileUseCase.execute(
+            request = GetMyProfileUseCase.Request(
+                id = id
+            ),
+            executedAt = LocalDateTime.now()
+        )
+
+        return ResponseEntity.ok(ApiResponse.success(response.nickname))
     }
 }
