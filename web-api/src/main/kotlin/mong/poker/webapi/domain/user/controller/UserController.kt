@@ -1,5 +1,6 @@
 package mong.poker.webapi.domain.user.controller
 
+import io.swagger.v3.oas.annotations.Operation
 import jakarta.validation.Valid
 import mong.poker.application.domain.user.usecase.GetMyProfileUseCase
 import mong.poker.application.domain.user.usecase.SignInUseCase
@@ -21,6 +22,7 @@ class UserController(
     private val signInUseCase: SignInUseCase,
     private val getMyProfileUseCase: GetMyProfileUseCase,
 ) {
+    @Operation(summary = "회원가입")
     @PostMapping("/signup")
     fun signUp(
         @RequestBody @Valid request: SignUpRequest
@@ -39,6 +41,7 @@ class UserController(
             .body(ApiResponse.success(response))
     }
 
+    @Operation(summary = "로그인")
     @PostMapping("/signin")
     fun signIn(
         @RequestBody @Valid request: SignInRequest
@@ -54,6 +57,7 @@ class UserController(
         return ResponseEntity.ok(ApiResponse.success(response))
     }
 
+    @Operation(summary = "내 프로필 조회")
     @GetMapping("/me")
     fun getMe(
         @ApiRequiredAuth userId: UUID,

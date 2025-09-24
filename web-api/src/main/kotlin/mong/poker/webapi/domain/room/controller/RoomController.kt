@@ -1,5 +1,6 @@
 package mong.poker.webapi.domain.room.controller
 
+import io.swagger.v3.oas.annotations.Operation
 import jakarta.validation.Valid
 import mong.poker.application.domain.room.usecase.CreateGameRoomUseCase
 import mong.poker.webapi.domain.room.controller.request.CreateRoomRequest
@@ -18,6 +19,7 @@ class RoomController(
     private val createGameRoomUseCase: CreateGameRoomUseCase
 ) {
 
+    @Operation(summary = "게임 방 생성")
     @PostMapping
     fun createRoom(
         @ApiRequiredAuth userId: UUID,
@@ -34,7 +36,7 @@ class RoomController(
             ),
             executedAt = java.time.LocalDateTime.now(),
         )
-        
+
         return ResponseEntity.ok(ApiResponse.success(response))
     }
 }
