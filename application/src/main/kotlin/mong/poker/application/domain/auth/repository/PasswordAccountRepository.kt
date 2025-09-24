@@ -1,6 +1,6 @@
 package mong.poker.application.domain.auth.repository
 
-import mong.poker.core.domain.auth.domain.PasswordAccount
+import mong.poker.core.domain.auth.PasswordAccount
 import org.springframework.data.jpa.repository.JpaRepository
 
 interface PasswordAccountRepository : JpaRepository<PasswordAccount, Long> {

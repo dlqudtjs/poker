@@ -1,4 +1,4 @@
-package mong.poker.core.domain.user.domain
+package mong.poker.core.domain.user
 
 import jakarta.persistence.Column
 import jakarta.persistence.Entity

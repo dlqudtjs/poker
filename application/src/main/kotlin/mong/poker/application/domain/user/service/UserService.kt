@@ -1,7 +1,7 @@
 package mong.poker.application.domain.user.service
 
 import mong.poker.application.domain.user.repository.UserRepository
-import mong.poker.core.domain.user.domain.User
+import mong.poker.core.domain.user.User
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Propagation

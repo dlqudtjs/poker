@@ -24,7 +24,7 @@ class UserController(
     @PostMapping("/signup")
     fun signUp(
         @RequestBody @Valid request: SignUpRequest
-    ): ResponseEntity<ApiResponse<UUID>> {
+    ): ResponseEntity<ApiResponse<SignUpUseCase.Response>> {
         val response = signUpUseCase.execute(
             request = SignUpUseCase.Request(
                 accountId = request.accountId,
@@ -36,13 +36,13 @@ class UserController(
 
         return ResponseEntity
             .status(HttpStatus.CREATED)
-            .body(ApiResponse.success(response.id))
+            .body(ApiResponse.success(response))
     }
 
     @PostMapping("/signin")
     fun signIn(
         @RequestBody @Valid request: SignInRequest
-    ): ResponseEntity<ApiResponse<String>> {
+    ): ResponseEntity<ApiResponse<SignInUseCase.Response>> {
         val response = signInUseCase.execute(
             request = SignInUseCase.Request(
                 accountId = request.accountId,
@@ -51,20 +51,20 @@ class UserController(
             executedAt = LocalDateTime.now()
         )
 
-        return ResponseEntity.ok(ApiResponse.success(response.token))
+        return ResponseEntity.ok(ApiResponse.success(response))
     }
 
     @GetMapping("/me")
     fun getMe(
-        @ApiRequiredAuth id: UUID,
-    ): ResponseEntity<ApiResponse<String>> {
+        @ApiRequiredAuth userId: UUID,
+    ): ResponseEntity<ApiResponse<GetMyProfileUseCase.Response>> {
         val response = getMyProfileUseCase.execute(
             request = GetMyProfileUseCase.Request(
-                id = id
+                userId = userId
             ),
             executedAt = LocalDateTime.now()
         )
 
-        return ResponseEntity.ok(ApiResponse.success(response.nickname))
+        return ResponseEntity.ok(ApiResponse.success(response))
     }
 }

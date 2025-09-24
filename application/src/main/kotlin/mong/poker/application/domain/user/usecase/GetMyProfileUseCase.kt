@@ -20,7 +20,7 @@ class GetMyProfileUseCase(
         request: Request,
         executedAt: LocalDateTime,
     ): Response {
-        val user = userService.getById(request.id)
+        val user = userService.getById(request.userId)
             ?: throw CustomException(ErrorType.USER_NOT_FOUND)
 
         return Response(
@@ -29,7 +29,7 @@ class GetMyProfileUseCase(
     }
 
     data class Request(
-        val id: UUID,
+        val userId: UUID,
     )
 
     data class Response(

@@ -5,7 +5,7 @@ import mong.poker.application.domain.auth.service.PasswordAccountService
 import mong.poker.application.global.support.exception.CustomException
 import mong.poker.application.global.support.exception.ErrorType
 import mong.poker.application.global.support.usecase.UseCase
-import mong.poker.core.domain.user.domain.User
+import mong.poker.core.domain.user.User
 import mong.poker.lib.encrypt.PasswordEncoder
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Propagation

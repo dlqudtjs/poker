@@ -1,8 +1,8 @@
 package mong.poker.application.domain.auth.service
 
 import mong.poker.application.domain.auth.repository.PasswordAccountRepository
-import mong.poker.core.domain.auth.domain.PasswordAccount
-import mong.poker.core.domain.user.domain.User
+import mong.poker.core.domain.auth.PasswordAccount
+import mong.poker.core.domain.user.User
 import mong.poker.lib.encrypt.PasswordEncoder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Propagation
