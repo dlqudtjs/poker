@@ -21,19 +21,17 @@ object FailureHandler {
         when (throwable) {
             is CustomException -> {
                 ExceptionUtil.writeErrorJson(
-                    response,
-                    throwable.errorType,
+                    response = response,
+                    errorType = throwable.errorType,
                 )
-                throw throwable
             }
 
             else -> {
                 log.error(throwable.stackTraceToString())
                 ExceptionUtil.writeErrorJson(
-                    response,
-                    ErrorType.UNCAUGHT_EXCEPTION,
+                    response = response,
+                    errorType = ErrorType.UNCAUGHT_EXCEPTION,
                 )
-                throw throwable
             }
         }
     }

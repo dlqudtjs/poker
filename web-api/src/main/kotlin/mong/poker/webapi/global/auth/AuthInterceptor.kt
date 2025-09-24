@@ -1,10 +1,15 @@
 package mong.poker.webapi.global.auth
 
 import TokenManager
+import jakarta.annotation.PostConstruct
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
+import mong.poker.application.global.support.exception.CustomException
+import mong.poker.application.global.support.exception.ErrorType
+import mong.poker.webapi.global.exception.FailureHandler
 import org.springframework.http.HttpMethod
 import org.springframework.stereotype.Component
+import org.springframework.util.AntPathMatcher
 import org.springframework.web.cors.CorsUtils
 import org.springframework.web.servlet.HandlerInterceptor
 import java.util.*
@@ -12,9 +17,23 @@ import java.util.*
 @Component
 class AuthInterceptor(
     private val tokenManager: TokenManager,
-    private val socketAuthContext: ApiAuthContext,
+    private val apiAuthContext: ApiAuthContext,
     private val authNotRequiredConditions: MutableSet<UriAndMethodsCondition> = mutableSetOf(),
 ) : HandlerInterceptor {
+
+    companion object {
+        private val pathMatcher = AntPathMatcher()
+    }
+
+    @PostConstruct
+    fun configureAuthWhitelist() {
+        authNotRequiredConditions += listOf(
+            UriAndMethodsCondition("/swagger-ui/**", setOf(HttpMethod.GET)),
+            UriAndMethodsCondition("/v3/api-docs/**", setOf(HttpMethod.GET)),
+            UriAndMethodsCondition("/api/v1/users/signup", setOf(HttpMethod.POST)),
+            UriAndMethodsCondition("/api/v1/users/signin", setOf(HttpMethod.POST)),
+        )
+    }
 
     override fun preHandle(
         request: HttpServletRequest,
@@ -30,8 +49,12 @@ class AuthInterceptor(
         }
 
         val userId = extractUserFromJwt(request)
-        socketAuthContext.id = UUID.fromString(userId)
+        if (userId == null) {
+            FailureHandler.handleFailure(CustomException(ErrorType.UNAUTHORIZED), response)
+            return false
+        }
 
+        apiAuthContext.id = UUID.fromString(userId)
         return true
     }
 
@@ -56,11 +79,8 @@ class AuthInterceptor(
         val uriPattern: String,
         val httpMethods: Set<HttpMethod>,
     ) {
-        fun match(
-            requestURI: String,
-            httpMethod: HttpMethod,
-        ): Boolean {
-            return requestURI == uriPattern && httpMethods.contains(httpMethod)
+        fun match(requestURI: String, httpMethod: HttpMethod): Boolean {
+            return pathMatcher.match(uriPattern, requestURI) && httpMethods.contains(httpMethod)
         }
     }
 }
