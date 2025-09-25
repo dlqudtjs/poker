@@ -26,6 +26,10 @@ class GameRoom(
     }
 
     sealed class GameRoomAccess {
+        fun isPrivate(): Boolean {
+            return this is Private
+        }
+
         object Public : GameRoomAccess()
         data class Private(val password: String) : GameRoomAccess()
     }
