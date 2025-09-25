@@ -9,7 +9,7 @@ import mong.poker.application.global.support.exception.ErrorType
 sealed class ApiResponse<T> {
     data class Success<T>(val data: T?) : ApiResponse<T>()
     data class SuccessList<T>(val pageSize: Int, val page: Int, val data: List<T>) : ApiResponse<T>()
-    data class Error<T>(val status: Int, val message: String) : ApiResponse<Nothing>()
+    data class Error<T>(val status: Int, val message: String) : ApiResponse<Unit>()
 
     companion object {
         fun <T> success(data: T?) = Success(data)

@@ -25,10 +25,10 @@ class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(Exception::class)
-    fun handleException(e: Exception): ResponseEntity<ApiResponse.Error<Nothing>> {
+    fun handleException(e: Exception): ResponseEntity<ApiResponse.Error<Unit>> {
         printErrorMessage(e)
 
-        val response = ApiResponse.error<Nothing>(
+        val response = ApiResponse.error<Unit>(
             errorType = ErrorType.UNCAUGHT_EXCEPTION,
         )
 
@@ -38,10 +38,10 @@ class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(CustomException::class)
-    fun handleCustomException(e: CustomException): ResponseEntity<ApiResponse.Error<Nothing>> {
+    fun handleCustomException(e: CustomException): ResponseEntity<ApiResponse.Error<Unit>> {
         printErrorMessage(e)
 
-        val response = ApiResponse.error<Nothing>(
+        val response = ApiResponse.error<Unit>(
             exception = e,
         )
 
@@ -51,7 +51,7 @@ class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(MethodArgumentNotValidException::class)
-    fun handleValidationExceptions(e: MethodArgumentNotValidException): ResponseEntity<ApiResponse.Error<Nothing>> {
+    fun handleValidationExceptions(e: MethodArgumentNotValidException): ResponseEntity<ApiResponse.Error<Unit>> {
         printErrorMessage(e)
 
         // 첫 번째 필드 에러 메시지를 가져오기
@@ -60,7 +60,7 @@ class GlobalExceptionHandler {
             .firstOrNull()
             ?.defaultMessage ?: "잘못된 요청입니다."
 
-        val response = ApiResponse.error<Nothing>(
+        val response = ApiResponse.error<Unit>(
             status = HttpStatus.BAD_REQUEST.value(),
             message = firstErrorMessage
         )
@@ -74,10 +74,10 @@ class GlobalExceptionHandler {
     @ExceptionHandler(HttpMessageNotReadableException::class)
     fun handleHttpMessageNotReadableException(
         ex: HttpMessageNotReadableException
-    ): ResponseEntity<ApiResponse.Error<Nothing>> {
+    ): ResponseEntity<ApiResponse.Error<Unit>> {
         printErrorMessage(ex)
 
-        val response = ApiResponse.error<Nothing>(
+        val response = ApiResponse.error<Unit>(
             errorType = ErrorType.BAD_REQUEST,
         )
 
@@ -90,9 +90,9 @@ class GlobalExceptionHandler {
     @ExceptionHandler(NoHandlerFoundException::class)
     fun handleNoHandlerFoundException(
         ex: NoHandlerFoundException
-    ): ResponseEntity<ApiResponse.Error<Nothing>> {
+    ): ResponseEntity<ApiResponse.Error<Unit>> {
         printErrorMessage(ex)
-        val response = ApiResponse.error<Nothing>(
+        val response = ApiResponse.error<Unit>(
             errorType = ErrorType.NOT_FOUND,
         )
 

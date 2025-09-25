@@ -13,7 +13,7 @@ class ExceptionUtil {
             response: HttpServletResponse,
             errorType: ErrorType,
         ) {
-            val errorResponse = ApiResponse.error<Nothing>(
+            val errorResponse = ApiResponse.error<Unit>(
                 errorType = errorType,
             )
 
