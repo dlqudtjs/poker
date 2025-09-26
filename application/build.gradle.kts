@@ -18,6 +18,7 @@ dependencies {
 
     testImplementation("org.junit.jupiter:junit-jupiter")
     testImplementation("org.springframework:spring-test")
+    testImplementation("io.mockk:mockk:1.14.5")
 }
 
 kotlin {

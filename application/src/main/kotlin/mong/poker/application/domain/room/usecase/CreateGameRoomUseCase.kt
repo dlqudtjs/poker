@@ -40,7 +40,7 @@ class CreateGameRoomUseCase(
     )
 
     private fun Request.toGameRoomAccess(): GameRoom.GameRoomAccess {
-        return if (this.password.isNullOrBlank()) {
+        return if (this.password.isNullOrEmpty()) {
             GameRoom.GameRoomAccess.Public
         } else {
             GameRoom.GameRoomAccess.Private(password = this.password)
