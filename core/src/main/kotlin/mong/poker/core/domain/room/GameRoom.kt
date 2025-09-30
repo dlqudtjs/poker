@@ -2,6 +2,7 @@ package mong.poker.core.domain.room
 
 import mong.poker.core.domain.room.command.CreateGameRoomCommand
 import mong.poker.core.domain.room.command.UpdateGameRoomCommand
+import mong.poker.core.domain.room.enums.GameState
 import java.util.*
 import java.util.UUID.randomUUID
 
@@ -36,15 +37,6 @@ class GameRoom(
         )
     }
 
-    sealed class GameRoomAccess {
-        fun isPrivate(): Boolean {
-            return this is Private
-        }
-
-        object Public : GameRoomAccess()
-        data class Private(val password: String) : GameRoomAccess()
-    }
-
     fun getRoomName(): String {
         return roomName
     }
@@ -55,5 +47,58 @@ class GameRoom(
 
     fun getGameRoomStatus(): GameRoomStatus {
         return gameRoomStatus
+    }
+
+    sealed class GameRoomAccess {
+        fun isPrivate(): Boolean {
+            return this is Private
+        }
+
+        object Public : GameRoomAccess()
+        data class Private(val password: String) : GameRoomAccess()
+    }
+
+    data class GameRoomStatus(
+        private var bbAmount: Int,
+        private var sbAmount: Int,
+        private var maxPlayerCount: Int,
+        private var gameState: GameState = GameState.WAITING,
+        private var totalRounds: Int = 0, // 총 진행된 라운드 수
+        private var currentRound: GameRound? = null  // 현재 진행 중인 라운드
+    ) {
+        companion object {
+            fun create(
+                bbAmount: Int,
+                sbAmount: Int,
+                maxPlayerCount: Int
+            ) = GameRoomStatus(
+                bbAmount = bbAmount,
+                sbAmount = sbAmount,
+                maxPlayerCount = maxPlayerCount
+            )
+        }
+
+        // 게임방 상태 업데이트
+        fun roomUpdate(
+            bbAmount: Int,
+            sbAmount: Int,
+            maxPlayerCount: Int
+        ) = GameRoomStatus(
+            bbAmount = bbAmount,
+            sbAmount = sbAmount,
+            maxPlayerCount = maxPlayerCount,
+        )
+
+        fun getBbAmount(): Int {
+            return bbAmount
+        }
+
+        fun getSbAmount(): Int {
+            return sbAmount
+        }
+
+        fun getMaxPlayerCount(): Int {
+            return maxPlayerCount
+        }
     }
 }

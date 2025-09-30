@@ -5,7 +5,7 @@ import io.mockk.mockk
 import io.mockk.verify
 import mong.poker.application.domain.room.service.GameRoomService
 import mong.poker.core.domain.room.GameRoom
-import mong.poker.core.domain.room.GameRoomStatus
+import mong.poker.core.domain.room.GameRoom.GameRoomStatus
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName

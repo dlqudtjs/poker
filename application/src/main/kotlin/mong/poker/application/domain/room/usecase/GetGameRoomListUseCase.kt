@@ -22,7 +22,8 @@ class GetGameRoomListUseCase(
                 maxUserCount = room.getGameRoomStatus().getMaxPlayerCount(),
                 isPrivate = room.getRoomAccess().isPrivate(),
                 bbAmount = room.getGameRoomStatus().getBbAmount(),
-                sbAmount = room.getGameRoomStatus().getSbAmount()
+                sbAmount = room.getGameRoomStatus().getSbAmount(),
+                currentPlayerCount = room.getGameRoomStatus().getMaxPlayerCount(),
             )
         }
 
@@ -40,5 +41,6 @@ class GetGameRoomListUseCase(
         val isPrivate: Boolean,
         val bbAmount: Int,
         val sbAmount: Int,
+        val currentPlayerCount: Int,
     )
 }
