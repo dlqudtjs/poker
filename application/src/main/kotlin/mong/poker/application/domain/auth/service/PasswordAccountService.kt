@@ -4,6 +4,7 @@ import mong.poker.application.domain.auth.repository.PasswordAccountRepository
 import mong.poker.core.domain.auth.PasswordAccount
 import mong.poker.core.domain.user.User
 import mong.poker.lib.encrypt.PasswordEncoder
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Propagation
 import org.springframework.transaction.annotation.Transactional
@@ -14,6 +15,9 @@ class PasswordAccountService(
     private val passwordAccountRepository: PasswordAccountRepository,
     private val passwordEncoder: PasswordEncoder,
 ) {
+    companion object {
+        private val logger = LoggerFactory.getLogger(PasswordAccountService::class.java)
+    }
 
     @Transactional(propagation = Propagation.REQUIRED)
     fun create(
@@ -30,6 +34,8 @@ class PasswordAccountService(
                 createdAt = executedAt,
             )
         )
+
+        logger.info("패스워드 계정 생성 Account ID: $accountId, User ID: ${user.getId()}")
     }
 
     fun existByAccountId(accountId: String): Boolean {

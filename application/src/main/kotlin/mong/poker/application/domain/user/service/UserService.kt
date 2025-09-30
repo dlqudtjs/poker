@@ -13,6 +13,10 @@ import java.util.*
 class UserService(
     private val userRepository: UserRepository
 ) {
+    companion object {
+        private val logger = org.slf4j.LoggerFactory.getLogger(UserService::class.java)
+    }
+
     fun existByNickname(nickname: String): Boolean {
         return userRepository.existsUserByNickname(nickname)
     }
@@ -21,12 +25,16 @@ class UserService(
     fun create(
         nickname: String,
         executedAt: LocalDateTime,
-    ) = userRepository.save(
-        User.create(
-            nickname = nickname,
-            createdAt = executedAt,
+    ): User {
+        val user = userRepository.save(
+            User.create(
+                nickname = nickname,
+                createdAt = executedAt,
+            )
         )
-    )
+
+        logger.info("유저 생성 userId: ${user.getId()}, nickname: ${user.getNickname()}")
+    }
 
     @Transactional(readOnly = true, propagation = Propagation.REQUIRED)
     fun getById(id: UUID): User? {

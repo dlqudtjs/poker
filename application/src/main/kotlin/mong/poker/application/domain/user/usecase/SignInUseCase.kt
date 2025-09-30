@@ -34,7 +34,6 @@ class SignInUseCase(
         return Response(token = createAuthToken(account.getUser(), executedAt))
     }
 
-
     private fun createAuthToken(
         user: User,
         now: LocalDateTime,

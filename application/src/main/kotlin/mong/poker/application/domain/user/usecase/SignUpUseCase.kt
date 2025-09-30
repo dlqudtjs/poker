@@ -5,7 +5,6 @@ import mong.poker.application.domain.user.service.UserService
 import mong.poker.application.global.support.exception.CustomException
 import mong.poker.application.global.support.exception.ErrorType
 import mong.poker.application.global.support.usecase.UseCase
-import mong.poker.lib.encrypt.PasswordEncoder
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Propagation
 import org.springframework.transaction.annotation.Transactional
@@ -16,7 +15,6 @@ import java.util.*
 class SignUpUseCase(
     private val userService: UserService,
     private val passwordAccountService: PasswordAccountService,
-    private val passwordEncoder: PasswordEncoder
 ) : UseCase<SignUpUseCase.Request, SignUpUseCase.Response> {
 
     @Transactional(propagation = Propagation.REQUIRED)
