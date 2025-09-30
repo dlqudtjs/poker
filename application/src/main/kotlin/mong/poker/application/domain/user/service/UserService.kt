@@ -34,6 +34,8 @@ class UserService(
         )
 
         logger.info("유저 생성 userId: ${user.getId()}, nickname: ${user.getNickname()}")
+
+        return user
     }
 
     @Transactional(readOnly = true, propagation = Propagation.REQUIRED)

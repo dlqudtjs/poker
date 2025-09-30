@@ -6,9 +6,8 @@ import io.mockk.slot
 import io.mockk.verify
 import mong.poker.application.domain.room.service.GameRoomService
 import mong.poker.core.domain.room.GameRoom
-import mong.poker.core.domain.room.command.UpdateGameRoomCommand
+import mong.poker.core.domain.room.command.CreateGameRoomCommand
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -42,9 +41,10 @@ class CreateGameRoomUseCaseTest {
             bbAmount = 1000,
             sbAmount = 500
         )
+        val roomId = UUID.randomUUID()
 
-        val commandSlot = slot<UpdateGameRoomCommand>()
-        every { gameRoomService.createRoom(capture(commandSlot)) } returns Unit
+        val commandSlot = slot<CreateGameRoomCommand>()
+        every { gameRoomService.createRoom(capture(commandSlot)) } returns roomId
 
         // when
         val response = createGameRoomUseCase.execute(request, executedAt)
@@ -54,7 +54,7 @@ class CreateGameRoomUseCaseTest {
 
         val capturedCommand = commandSlot.captured
         assertEquals(GameRoom.GameRoomAccess.Public, capturedCommand.roomAccess)
-        assertNotNull(response.roomId)
+        assertEquals(roomId, response.roomId)
     }
 
     @Test
@@ -70,9 +70,10 @@ class CreateGameRoomUseCaseTest {
             bbAmount = 2000,
             sbAmount = 1000
         )
+        val roomId = UUID.randomUUID()
 
-        val commandSlot = slot<UpdateGameRoomCommand>()
-        every { gameRoomService.createRoom(capture(commandSlot)) } returns Unit
+        val commandSlot = slot<CreateGameRoomCommand>()
+        every { gameRoomService.createRoom(capture(commandSlot)) } returns roomId
 
         // when
         val response = createGameRoomUseCase.execute(request, executedAt)
@@ -82,7 +83,7 @@ class CreateGameRoomUseCaseTest {
 
         val capturedCommand = commandSlot.captured
         assertEquals(GameRoom.GameRoomAccess.Public, capturedCommand.roomAccess)
-        assertNotNull(response.roomId)
+        assertEquals(roomId, response.roomId)
     }
 
     @Test
@@ -99,9 +100,10 @@ class CreateGameRoomUseCaseTest {
             bbAmount = 500,
             sbAmount = 250
         )
+        val roomId = UUID.randomUUID()
 
-        val commandSlot = slot<UpdateGameRoomCommand>()
-        every { gameRoomService.createRoom(capture(commandSlot)) } returns Unit
+        val commandSlot = slot<CreateGameRoomCommand>()
+        every { gameRoomService.createRoom(capture(commandSlot)) } returns roomId
 
         // when
         val response = createGameRoomUseCase.execute(request, executedAt)
@@ -111,7 +113,7 @@ class CreateGameRoomUseCaseTest {
 
         val capturedCommand = commandSlot.captured
         assertEquals(GameRoom.GameRoomAccess.Private(password), capturedCommand.roomAccess)
-        assertNotNull(response.roomId)
+        assertEquals(roomId, response.roomId)
     }
 
     @Test
@@ -128,9 +130,10 @@ class CreateGameRoomUseCaseTest {
             bbAmount = 10000,
             sbAmount = 5000
         )
+        val roomId = UUID.randomUUID()
 
-        val commandSlot = slot<UpdateGameRoomCommand>()
-        every { gameRoomService.createRoom(capture(commandSlot)) } returns Unit
+        val commandSlot = slot<CreateGameRoomCommand>()
+        every { gameRoomService.createRoom(capture(commandSlot)) } returns roomId
 
         // when
         val response = createGameRoomUseCase.execute(request, executedAt)
@@ -140,7 +143,7 @@ class CreateGameRoomUseCaseTest {
 
         val capturedCommand = commandSlot.captured
         assertEquals(GameRoom.GameRoomAccess.Private(password), capturedCommand.roomAccess)
-        assertNotNull(response.roomId)
+        assertEquals(roomId, response.roomId)
     }
 
     @Test
@@ -157,9 +160,10 @@ class CreateGameRoomUseCaseTest {
             bbAmount = 5000,
             sbAmount = 2500
         )
+        val roomId = UUID.randomUUID()
 
-        val commandSlot = slot<UpdateGameRoomCommand>()
-        every { gameRoomService.createRoom(capture(commandSlot)) } returns Unit
+        val commandSlot = slot<CreateGameRoomCommand>()
+        every { gameRoomService.createRoom(capture(commandSlot)) } returns roomId
 
         // when
         val response = createGameRoomUseCase.execute(request, executedAt)
@@ -173,6 +177,6 @@ class CreateGameRoomUseCaseTest {
         assertEquals(request.sbAmount, capturedCommand.sbAmount)
         assertEquals(hostUserId, capturedCommand.hostUserId)
 
-        assertNotNull(response.roomId)
+        assertEquals(roomId, response.roomId)
     }
 }

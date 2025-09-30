@@ -205,13 +205,13 @@ class GetGameRoomListUseCaseTest {
         val mockRoomAccess = mockk<GameRoom.GameRoomAccess>()
 
         every { mockRoom.id } returns id
-        every { mockRoom.roomName } returns roomName
-        every { mockRoom.gameRoomStatus } returns mockGameRoomStatus
-        every { mockRoom.roomAccess } returns mockRoomAccess
+        every { mockRoom.getRoomName() } returns roomName
+        every { mockRoom.getGameRoomStatus() } returns mockGameRoomStatus
+        every { mockRoom.getRoomAccess() } returns mockRoomAccess
 
-        every { mockGameRoomStatus.maxPlayerCount } returns maxPlayerCount
-        every { mockGameRoomStatus.bbAmount } returns bbAmount
-        every { mockGameRoomStatus.sbAmount } returns sbAmount
+        every { mockGameRoomStatus.getMaxPlayerCount() } returns maxPlayerCount
+        every { mockGameRoomStatus.getBbAmount() } returns bbAmount
+        every { mockGameRoomStatus.getSbAmount() } returns sbAmount
 
         every { mockRoomAccess.isPrivate() } returns isPrivate
 
