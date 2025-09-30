@@ -6,7 +6,7 @@ import io.mockk.slot
 import io.mockk.verify
 import mong.poker.application.domain.room.service.GameRoomService
 import mong.poker.core.domain.room.GameRoom
-import mong.poker.core.domain.room.command.CreateGameRoomCommand
+import mong.poker.core.domain.room.command.UpdateGameRoomCommand
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.BeforeEach
@@ -43,7 +43,7 @@ class CreateGameRoomUseCaseTest {
             sbAmount = 500
         )
 
-        val commandSlot = slot<CreateGameRoomCommand>()
+        val commandSlot = slot<UpdateGameRoomCommand>()
         every { gameRoomService.createRoom(capture(commandSlot)) } returns Unit
 
         // when
@@ -71,7 +71,7 @@ class CreateGameRoomUseCaseTest {
             sbAmount = 1000
         )
 
-        val commandSlot = slot<CreateGameRoomCommand>()
+        val commandSlot = slot<UpdateGameRoomCommand>()
         every { gameRoomService.createRoom(capture(commandSlot)) } returns Unit
 
         // when
@@ -100,7 +100,7 @@ class CreateGameRoomUseCaseTest {
             sbAmount = 250
         )
 
-        val commandSlot = slot<CreateGameRoomCommand>()
+        val commandSlot = slot<UpdateGameRoomCommand>()
         every { gameRoomService.createRoom(capture(commandSlot)) } returns Unit
 
         // when
@@ -129,7 +129,7 @@ class CreateGameRoomUseCaseTest {
             sbAmount = 5000
         )
 
-        val commandSlot = slot<CreateGameRoomCommand>()
+        val commandSlot = slot<UpdateGameRoomCommand>()
         every { gameRoomService.createRoom(capture(commandSlot)) } returns Unit
 
         // when
@@ -158,7 +158,7 @@ class CreateGameRoomUseCaseTest {
             sbAmount = 2500
         )
 
-        val commandSlot = slot<CreateGameRoomCommand>()
+        val commandSlot = slot<UpdateGameRoomCommand>()
         every { gameRoomService.createRoom(capture(commandSlot)) } returns Unit
 
         // when

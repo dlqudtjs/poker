@@ -3,15 +3,15 @@ package mong.poker.application.domain.room.usecase
 import mong.poker.application.domain.room.service.GameRoomService
 import mong.poker.application.global.support.usecase.UseCase
 import mong.poker.core.domain.room.GameRoom
-import mong.poker.core.domain.room.command.CreateGameRoomCommand
+import mong.poker.core.domain.room.command.UpdateGameRoomCommand
 import org.springframework.stereotype.Component
 import java.time.LocalDateTime
 import java.util.*
 
 @Component
-class CreateGameRoomUseCase(
+class UpdateGameRoomUseCase(
     private val gameRoomService: GameRoomService,
-) : UseCase<CreateGameRoomUseCase.Request, CreateGameRoomUseCase.Response> {
+) : UseCase<UpdateGameRoomUseCase.Request, UpdateGameRoomUseCase.Response> {
 
     override fun execute(
         request: Request,
@@ -21,13 +21,13 @@ class CreateGameRoomUseCase(
 
         val command = request.toCreateGameRoomCommand(gameRoomAccess)
 
-        val roomId = gameRoomService.createRoom(command)
+        val roomId = gameRoomService.updateRoom(command)
 
         return Response(roomId = roomId)
     }
 
     data class Request(
-        val hostUserId: UUID,
+        val roomId: UUID,
         val roomName: String,
         val password: String?,
         val maxUserCount: Int,
@@ -47,14 +47,14 @@ class CreateGameRoomUseCase(
         }
     }
 
-    private fun Request.toCreateGameRoomCommand(access: GameRoom.GameRoomAccess): CreateGameRoomCommand {
-        return CreateGameRoomCommand(
+    private fun Request.toCreateGameRoomCommand(access: GameRoom.GameRoomAccess): UpdateGameRoomCommand {
+        return UpdateGameRoomCommand(
+            roomId = this.roomId,
             roomName = this.roomName,
             roomAccess = access,
             maxPlayerCount = this.maxUserCount,
             bbAmount = this.bbAmount,
             sbAmount = this.sbAmount,
-            hostUserId = this.hostUserId,
         )
     }
 }

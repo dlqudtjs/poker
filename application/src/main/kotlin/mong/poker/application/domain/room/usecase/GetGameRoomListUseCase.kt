@@ -18,11 +18,11 @@ class GetGameRoomListUseCase(
         val rooms = gameRoomService.getAllRooms().map { room ->
             RoomInfo(
                 roomId = room.id,
-                roomName = room.roomName,
-                maxUserCount = room.gameRoomStatus.maxPlayerCount,
-                isPrivate = room.roomAccess.isPrivate(),
-                bbAmount = room.gameRoomStatus.bbAmount,
-                sbAmount = room.gameRoomStatus.sbAmount,
+                roomName = room.getRoomName(),
+                maxUserCount = room.getGameRoomStatus().getMaxPlayerCount(),
+                isPrivate = room.getRoomAccess().isPrivate(),
+                bbAmount = room.getGameRoomStatus().getBbAmount(),
+                sbAmount = room.getGameRoomStatus().getSbAmount()
             )
         }
 
