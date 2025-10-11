@@ -6,16 +6,12 @@ plugins {
 }
 
 dependencies {
-    implementation(project(":socket-application"))
     implementation(project(":application"))
     implementation(project(":core"))
     implementation(project(":lib"))
 
-    // WebSocket 및 STOMP 지원
-    implementation("org.springframework.boot:spring-boot-starter-websocket")
-
-    // 메시지 처리 (STOMP 메시지 처리, SimpMessaging 등)
-    implementation("org.springframework:spring-messaging")
+    implementation("org.springframework:spring-context")
+    implementation("org.springframework.boot:spring-boot-starter-logging")
 }
 
 tasks.named<org.springframework.boot.gradle.tasks.bundling.BootJar>("bootJar") {

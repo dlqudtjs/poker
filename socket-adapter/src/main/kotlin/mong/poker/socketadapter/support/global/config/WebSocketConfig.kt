@@ -23,7 +23,7 @@ class WebSocketConfig(
         // 클라이언트가 WebSocket 연결을 시도할 때 사용할 엔드포인트 URL 경로
         registry.addEndpoint("/ws")
             .setAllowedOriginPatterns("*")
-            .withSockJS() // SockJS fallback 지원
+//            .withSockJS() // SockJS fallback 지원 (배포 시 주석 해제)
     }
 
     override fun configureClientInboundChannel(registration: ChannelRegistration) {
