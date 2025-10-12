@@ -5,6 +5,7 @@ import jakarta.validation.Valid
 import mong.poker.application.domain.user.usecase.GetMyProfileUseCase
 import mong.poker.application.domain.user.usecase.SignInUseCase
 import mong.poker.application.domain.user.usecase.SignUpUseCase
+import mong.poker.core.domain.user.UserInfo
 import mong.poker.webapi.domain.user.controller.request.SignInRequest
 import mong.poker.webapi.domain.user.controller.request.SignUpRequest
 import mong.poker.webapi.global.auth.ApiRequiredAuth
@@ -13,7 +14,6 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import java.time.LocalDateTime
-import java.util.*
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -60,11 +60,11 @@ class UserController(
     @Operation(summary = "내 프로필 조회")
     @GetMapping("/me")
     fun getMe(
-        @ApiRequiredAuth userId: UUID,
+        @ApiRequiredAuth userInfo: UserInfo,
     ): ResponseEntity<ApiResponse<GetMyProfileUseCase.Response>> {
         val response = getMyProfileUseCase.execute(
             request = GetMyProfileUseCase.Request(
-                userId = userId
+                userId = userInfo.id
             ),
             executedAt = LocalDateTime.now()
         )

@@ -5,6 +5,7 @@ import jakarta.validation.Valid
 import mong.poker.application.domain.room.usecase.CreateGameRoomUseCase
 import mong.poker.application.domain.room.usecase.GetGameRoomListUseCase
 import mong.poker.application.domain.room.usecase.UpdateGameRoomUseCase
+import mong.poker.core.domain.user.UserInfo
 import mong.poker.webapi.domain.room.controller.request.CreateRoomRequest
 import mong.poker.webapi.domain.room.controller.request.UpdateRoomRequest
 import mong.poker.webapi.global.auth.ApiRequiredAuth
@@ -25,12 +26,12 @@ class RoomController(
     @Operation(summary = "게임 방 생성")
     @PostMapping
     fun createRoom(
-        @ApiRequiredAuth userId: UUID,
+        @ApiRequiredAuth userInfo: UserInfo,
         @RequestBody @Valid request: CreateRoomRequest
     ): ResponseEntity<ApiResponse<CreateGameRoomUseCase.Response>> {
         val response = createGameRoomUseCase.execute(
             request = CreateGameRoomUseCase.Request(
-                hostUserId = userId,
+                userInfo = userInfo,
                 roomName = request.title,
                 password = request.password,
                 maxUserCount = request.maxPlayerCount,
@@ -60,6 +61,7 @@ class RoomController(
     @PatchMapping("/{roomId}")
     fun updateRoom(
         @PathVariable roomId: UUID,
+        @ApiRequiredAuth userInfo: UserInfo,
         @RequestBody @Valid request: UpdateRoomRequest
     ): ResponseEntity<ApiResponse<UpdateGameRoomUseCase.Response>> {
         val response = updateGameRoomUseCase.execute(
@@ -70,6 +72,7 @@ class RoomController(
                 maxUserCount = request.maxPlayerCount,
                 bbAmount = request.bbAmount,
                 sbAmount = request.sbAmount,
+                userInfo = userInfo,
             ),
             executedAt = java.time.LocalDateTime.now(),
         )

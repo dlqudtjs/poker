@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import mong.poker.application.global.support.exception.CustomException
 import mong.poker.application.global.support.exception.ErrorType
+import mong.poker.core.domain.user.UserInfo
 import mong.poker.webapi.global.exception.FailureHandler
 import org.springframework.http.HttpMethod
 import org.springframework.stereotype.Component
@@ -48,13 +49,13 @@ class AuthInterceptor(
             return true
         }
 
-        val userId = extractUserFromJwt(request)
-        if (userId == null) {
+        val userInfo = extractUserFromJwt(request)
+        if (userInfo == null) {
             FailureHandler.handleFailure(CustomException(ErrorType.UNAUTHORIZED), response)
             return false
         }
 
-        apiAuthContext.id = UUID.fromString(userId)
+        apiAuthContext.userInfo = userInfo
         return true
     }
 
@@ -64,14 +65,17 @@ class AuthInterceptor(
         return authNotRequiredConditions.any { it.match(requestURI, httpMethod) }
     }
 
-    private fun extractUserFromJwt(request: HttpServletRequest): String? {
+    private fun extractUserFromJwt(request: HttpServletRequest): UserInfo? {
         val authHeader = request.getHeader("Authorization") ?: return null
         if (!authHeader.startsWith("Bearer ")) return null
 
         return runCatching {
             val token = authHeader.removePrefix("Bearer ")
             val claims = tokenManager.verifyToken(token)
-            claims["id"]?.toString()
+            UserInfo(
+                id = UUID.fromString(claims["id"].toString()),
+                nickname = claims["nickname"].toString(),
+            )
         }.getOrNull()
     }
 

@@ -4,6 +4,7 @@ import mong.poker.application.domain.room.service.GameRoomService
 import mong.poker.application.global.support.usecase.UseCase
 import mong.poker.core.domain.room.GameRoom
 import mong.poker.core.domain.room.command.CreateGameRoomCommand
+import mong.poker.core.domain.user.UserInfo
 import org.springframework.stereotype.Component
 import java.time.LocalDateTime
 import java.util.*
@@ -27,7 +28,7 @@ class CreateGameRoomUseCase(
     }
 
     data class Request(
-        val hostUserId: UUID,
+        val userInfo: UserInfo,
         val roomName: String,
         val password: String?,
         val maxUserCount: Int,
@@ -54,7 +55,7 @@ class CreateGameRoomUseCase(
             maxPlayerCount = this.maxUserCount,
             bbAmount = this.bbAmount,
             sbAmount = this.sbAmount,
-            hostUserId = this.hostUserId,
+            userInfo = this.userInfo,
         )
     }
 }

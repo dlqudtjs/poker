@@ -4,6 +4,7 @@ import mong.poker.application.domain.room.service.GameRoomService
 import mong.poker.application.global.support.usecase.UseCase
 import mong.poker.core.domain.room.GameRoom
 import mong.poker.core.domain.room.command.UpdateGameRoomCommand
+import mong.poker.core.domain.user.UserInfo
 import org.springframework.stereotype.Component
 import java.time.LocalDateTime
 import java.util.*
@@ -33,6 +34,7 @@ class UpdateGameRoomUseCase(
         val maxUserCount: Int,
         val bbAmount: Int,
         val sbAmount: Int,
+        val userInfo: UserInfo,
     )
 
     data class Response(
@@ -55,6 +57,7 @@ class UpdateGameRoomUseCase(
             maxPlayerCount = this.maxUserCount,
             bbAmount = this.bbAmount,
             sbAmount = this.sbAmount,
+            userInfo = this.userInfo,
         )
     }
 }

@@ -1,5 +1,6 @@
 package mong.poker.webapi.global.auth
 
+import mong.poker.core.domain.user.UserInfo
 import org.springframework.stereotype.Component
 import org.springframework.web.context.annotation.RequestScope
 import java.util.*
@@ -7,13 +8,23 @@ import java.util.*
 @RequestScope
 @Component
 class ApiAuthContext {
-    var id: UUID? = null
+    var userInfo: UserInfo? = null
 
-    fun set(id: UUID?) {
-        this.id = id
+    fun set(
+        id: UUID?,
+        nickname: String?,
+    ) {
+        if (id != null && nickname != null) {
+            this.userInfo = UserInfo(
+                id = id,
+                nickname = nickname,
+            )
+        } else {
+            this.userInfo = null
+        }
     }
 
     fun clear() {
-        this.id = null
+        this.userInfo = null
     }
 }

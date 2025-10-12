@@ -11,6 +11,13 @@ class ConnectedUser(
     private val connectedAt: LocalDateTime = LocalDateTime.now(),
 ) {
     sealed class UserLocation {
+        // 아무방에 속하지 않음 (로그인 직후)
+        object Idle : UserLocation() {
+            override fun toString(): String {
+                return "대기"
+            }
+        }
+
         object Lobby : UserLocation() {
             override fun toString(): String {
                 return "로비"

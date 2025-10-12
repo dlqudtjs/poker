@@ -41,7 +41,8 @@ class SignInUseCase(
         tokenManager.createToken(
             payload =
                 mapOf(
-                    "id" to user.getId()
+                    "id" to user.getId(),
+                    "nickname" to user.getNickname(),
                 ),
             issuedAt = now,
         )

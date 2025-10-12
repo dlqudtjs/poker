@@ -1,6 +1,7 @@
 package mong.poker.core.domain.room.command
 
 import mong.poker.core.domain.room.GameRoom
+import mong.poker.core.domain.user.UserInfo
 import java.util.*
 
 data class UpdateGameRoomCommand(
@@ -10,4 +11,5 @@ data class UpdateGameRoomCommand(
     val maxPlayerCount: Int,
     val bbAmount: Int,
     val sbAmount: Int,
+    val userInfo: UserInfo,
 )

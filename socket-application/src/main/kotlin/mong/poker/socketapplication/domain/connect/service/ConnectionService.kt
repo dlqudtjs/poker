@@ -29,7 +29,7 @@ class ConnectionService {
         // todo: 재연결 처리 로직 구현
         if (connectedUsers.containsKey(userId)) {
             val oldSession = connectedUsers[userId]!!.sessionId
-            logger.warn("⚠️ 기존 연결 존재: oldSessionId=$oldSession")
+            logger.warn("기존 연결 존재: oldSessionId=$oldSession")
             disconnect(oldSession)
         }
 
@@ -38,7 +38,7 @@ class ConnectionService {
             userId = userId,
             sessionId = sessionId,
             connectionStatus = ConnectionStatus.CONNECTED,
-            currentLocation = UserLocation.Lobby
+            currentLocation = UserLocation.Idle
         )
 
         // 양방향 저장
@@ -85,6 +85,10 @@ class ConnectionService {
 
             is UserLocation.InGame -> {
                 logger.error("게임 중 연결 끊김: gameId=${location.gameId}")
+            }
+
+            is UserLocation.Idle -> {
+                logger.info("대기 상태에서 퇴장")
             }
         }
 

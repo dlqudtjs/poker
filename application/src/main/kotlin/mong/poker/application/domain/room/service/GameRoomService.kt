@@ -21,7 +21,14 @@ class GameRoomService {
         val room = GameRoom.create(createGameRoomCommand)
         gameRooms[room.id] = room
 
-        logger.info("게임 방 생성 Room ID: ${room.id}, Room Name: ${room.getRoomName()}")
+        logger.info(
+            """
+            게임 방 생성
+            ├─ Room ID   : ${room.id}
+            ├─ Room Name : ${room.getRoomName()}
+            └─ 유저       : ${createGameRoomCommand.userInfo.nickname}
+            """.trimIndent()
+        )
 
         return room.id
     }
@@ -36,7 +43,14 @@ class GameRoomService {
 
         room.update(updateGameRoomCommand)
 
-        logger.info("게임 방 수정 Room ID: ${room.id}, Room Name: ${room.getRoomName()}")
+        logger.info(
+            """
+            게임 방 수정
+            ├─ Room ID   : ${room.id}
+            ├─ Room Name : ${room.getRoomName()}
+            └─ 유저       : ${updateGameRoomCommand.userInfo.nickname}
+            """.trimIndent()
+        )
 
         return room.id
     }
