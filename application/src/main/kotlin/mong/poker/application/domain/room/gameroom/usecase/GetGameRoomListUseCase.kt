@@ -1,6 +1,6 @@
-package mong.poker.application.domain.room.usecase
+package mong.poker.application.domain.room.gameroom.usecase
 
-import mong.poker.application.domain.room.service.GameRoomService
+import mong.poker.application.domain.room.gameroom.service.GameRoomService
 import mong.poker.application.global.support.usecase.UseCase
 import org.springframework.stereotype.Component
 import java.time.LocalDateTime

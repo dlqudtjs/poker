@@ -3,7 +3,8 @@ package mong.poker.application.domain.room.usecase
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import mong.poker.application.domain.room.service.GameRoomService
+import mong.poker.application.domain.room.gameroom.service.GameRoomService
+import mong.poker.application.domain.room.gameroom.usecase.GetGameRoomListUseCase
 import mong.poker.core.domain.room.GameRoom
 import mong.poker.core.domain.room.GameRoom.GameRoomStatus
 import org.junit.jupiter.api.Assertions.*

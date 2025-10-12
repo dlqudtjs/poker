@@ -2,9 +2,9 @@ package mong.poker.webapi.domain.room.controller
 
 import io.swagger.v3.oas.annotations.Operation
 import jakarta.validation.Valid
-import mong.poker.application.domain.room.usecase.CreateGameRoomUseCase
-import mong.poker.application.domain.room.usecase.GetGameRoomListUseCase
-import mong.poker.application.domain.room.usecase.UpdateGameRoomUseCase
+import mong.poker.application.domain.room.gameroom.usecase.CreateGameRoomUseCase
+import mong.poker.application.domain.room.gameroom.usecase.GetGameRoomListUseCase
+import mong.poker.application.domain.room.gameroom.usecase.UpdateGameRoomUseCase
 import mong.poker.core.domain.user.UserInfo
 import mong.poker.webapi.domain.room.controller.request.CreateRoomRequest
 import mong.poker.webapi.domain.room.controller.request.UpdateRoomRequest

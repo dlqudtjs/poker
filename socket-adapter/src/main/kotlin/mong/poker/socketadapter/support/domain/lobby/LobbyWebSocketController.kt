@@ -1,6 +1,6 @@
 package mong.poker.socketadapter.support.domain.lobby
 
-import mong.poker.application.domain.room.service.GameRoomService
+import mong.poker.application.domain.room.gameroom.service.GameRoomService
 import mong.poker.socketadapter.support.global.auth.WebSocketRequiredAuth
 import org.springframework.messaging.handler.annotation.MessageMapping
 import org.springframework.messaging.simp.SimpMessagingTemplate

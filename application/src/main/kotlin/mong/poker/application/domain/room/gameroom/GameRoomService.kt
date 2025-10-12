@@ -1,4 +1,4 @@
-package mong.poker.application.domain.room.service
+package mong.poker.application.domain.room.gameroom.service
 
 import mong.poker.application.global.support.exception.CustomException
 import mong.poker.application.global.support.exception.ErrorType

@@ -1,18 +1,18 @@
-package mong.poker.application.domain.room.usecase
+package mong.poker.application.domain.room.gameroom.usecase
 
-import mong.poker.application.domain.room.service.GameRoomService
+import mong.poker.application.domain.room.gameroom.service.GameRoomService
 import mong.poker.application.global.support.usecase.UseCase
 import mong.poker.core.domain.room.GameRoom
-import mong.poker.core.domain.room.command.UpdateGameRoomCommand
+import mong.poker.core.domain.room.command.CreateGameRoomCommand
 import mong.poker.core.domain.user.UserInfo
 import org.springframework.stereotype.Component
 import java.time.LocalDateTime
 import java.util.*
 
 @Component
-class UpdateGameRoomUseCase(
+class CreateGameRoomUseCase(
     private val gameRoomService: GameRoomService,
-) : UseCase<UpdateGameRoomUseCase.Request, UpdateGameRoomUseCase.Response> {
+) : UseCase<CreateGameRoomUseCase.Request, CreateGameRoomUseCase.Response> {
 
     override fun execute(
         request: Request,
@@ -22,19 +22,18 @@ class UpdateGameRoomUseCase(
 
         val command = request.toCreateGameRoomCommand(gameRoomAccess)
 
-        val roomId = gameRoomService.updateRoom(command)
+        val roomId = gameRoomService.createRoom(command)
 
         return Response(roomId = roomId)
     }
 
     data class Request(
-        val roomId: UUID,
+        val userInfo: UserInfo,
         val roomName: String,
         val password: String?,
         val maxUserCount: Int,
         val bbAmount: Int,
         val sbAmount: Int,
-        val userInfo: UserInfo,
     )
 
     data class Response(
@@ -49,9 +48,8 @@ class UpdateGameRoomUseCase(
         }
     }
 
-    private fun Request.toCreateGameRoomCommand(access: GameRoom.GameRoomAccess): UpdateGameRoomCommand {
-        return UpdateGameRoomCommand(
-            roomId = this.roomId,
+    private fun Request.toCreateGameRoomCommand(access: GameRoom.GameRoomAccess): CreateGameRoomCommand {
+        return CreateGameRoomCommand(
             roomName = this.roomName,
             roomAccess = access,
             maxPlayerCount = this.maxUserCount,

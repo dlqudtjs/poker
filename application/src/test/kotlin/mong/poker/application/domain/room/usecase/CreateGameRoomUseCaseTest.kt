@@ -4,7 +4,8 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
-import mong.poker.application.domain.room.service.GameRoomService
+import mong.poker.application.domain.room.gameroom.service.GameRoomService
+import mong.poker.application.domain.room.gameroom.usecase.CreateGameRoomUseCase
 import mong.poker.core.domain.room.GameRoom
 import mong.poker.core.domain.room.command.CreateGameRoomCommand
 import org.junit.jupiter.api.Assertions.assertEquals
