@@ -3,8 +3,9 @@ package mong.poker.socketadapter.support.global.config
 import TokenManager
 import mong.poker.application.global.support.exception.CustomException
 import mong.poker.application.global.support.exception.ErrorType
+import mong.poker.core.domain.user.UserInfo
 import mong.poker.socketadapter.support.global.auth.WebSocketAuthContext
-import mong.poker.socketapplication.domain.connect.service.ConnectionService
+import mong.poker.socketapplication.connection.ConnectionService
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpHeaders
 import org.springframework.messaging.Message
@@ -80,29 +81,32 @@ class WebSocketMessageInterceptor(
         socketAuthContext.clear()
     }
 
-    private fun extractUserFromJwt(accessor: StompHeaderAccessor): String? {
+    private fun extractUserFromJwt(accessor: StompHeaderAccessor): UserInfo? {
         return runCatching {
             val authHeader = accessor.getNativeHeader(HttpHeaders.AUTHORIZATION)?.firstOrNull()
                 ?: return null
             val token = authHeader.removePrefix("Bearer ")
 
             val claims = tokenManager.verifyToken(token)
-            claims["id"]?.toString()
+            UserInfo(
+                id = UUID.fromString(claims["id"].toString()),
+                nickname = claims["nickname"].toString(),
+            )
         }.getOrNull()
     }
 
     private fun handleConnect(accessor: StompHeaderAccessor) {
-        val userId = extractUserFromJwt(accessor)
+        val userInfo = extractUserFromJwt(accessor)
 
-        if (userId == null) {
+        if (userInfo == null) {
             logger.warn("${accessor.command}: 유효하지 않은 토큰입니다.")
             throw CustomException(ErrorType.UNAUTHORIZED)
         }
 
-        socketAuthContext.id = UUID.fromString(userId)
+        socketAuthContext.userInfo = userInfo
 
         connectionService.connect(
-            userId = UUID.fromString(userId),
+            userInfo = userInfo,
             sessionId = accessor.sessionId!!,
         )
     }

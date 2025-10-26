@@ -11,6 +11,7 @@ class GameRoom(
     private var roomName: String,
     private var roomAccess: GameRoomAccess, // 게임방 공개 여부
     private var gameRoomStatus: GameRoomStatus, // 게임방 상태
+    private var players: MutableList<UUID> = mutableListOf(), // 게임방에 참여한 플레이어 목록
 ) {
     companion object {
         fun create(command: CreateGameRoomCommand): GameRoom {

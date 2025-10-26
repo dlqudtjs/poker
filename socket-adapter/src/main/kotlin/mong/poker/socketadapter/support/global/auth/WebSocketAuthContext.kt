@@ -1,13 +1,13 @@
 package mong.poker.socketadapter.support.global.auth
 
+import mong.poker.core.domain.user.UserInfo
 import org.springframework.stereotype.Component
-import java.util.*
 
 @Component
 class WebSocketAuthContext {
-    private val threadLocal = ThreadLocal<UUID>()
+    private val threadLocal = ThreadLocal<UserInfo>()
 
-    var id: UUID?
+    var userInfo: UserInfo?
         get() = threadLocal.get()
         set(value) {
             if (value != null) {

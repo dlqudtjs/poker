@@ -18,7 +18,7 @@ class GameRoomService {
     }
 
     fun createRoom(createGameRoomCommand: CreateGameRoomCommand): UUID {
-        val room = GameRoom.create(createGameRoomCommand)
+        val room = GameRoom.Companion.create(createGameRoomCommand)
         gameRooms[room.id] = room
 
         logger.info(

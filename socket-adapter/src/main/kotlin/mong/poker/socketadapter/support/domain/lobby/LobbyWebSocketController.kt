@@ -1,11 +1,11 @@
 package mong.poker.socketadapter.support.domain.lobby
 
 import mong.poker.application.domain.room.gameroom.service.GameRoomService
+import mong.poker.core.domain.user.UserInfo
 import mong.poker.socketadapter.support.global.auth.WebSocketRequiredAuth
 import org.springframework.messaging.handler.annotation.MessageMapping
 import org.springframework.messaging.simp.SimpMessagingTemplate
 import org.springframework.stereotype.Controller
-import java.util.*
 
 @Controller
 class LobbyWebSocketController(
@@ -15,10 +15,9 @@ class LobbyWebSocketController(
     // 로비 접속
     @MessageMapping("/lobby/connect")
     fun connectToLobby(
-        @WebSocketRequiredAuth userId: UUID,
+        @WebSocketRequiredAuth userInfo: UserInfo,
         message: String
     ) {
-        println(userId)
         println(message)
 //        val sessionId = session.sessionId!!
 //
