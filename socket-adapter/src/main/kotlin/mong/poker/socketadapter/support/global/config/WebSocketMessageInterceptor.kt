@@ -4,8 +4,8 @@ import TokenManager
 import mong.poker.application.global.support.exception.CustomException
 import mong.poker.application.global.support.exception.ErrorType
 import mong.poker.core.domain.user.UserInfo
+import mong.poker.socketadapter.support.domain.connection.ConnectionService
 import mong.poker.socketadapter.support.global.auth.WebSocketAuthContext
-import mong.poker.socketapplication.connection.ConnectionService
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpHeaders
 import org.springframework.messaging.Message
@@ -50,6 +50,7 @@ class WebSocketMessageInterceptor(
 
             StompCommand.SUBSCRIBE -> {
                 logger.info("SUBSCRIBE 명령어 처리")
+                handleSubscribe(accessor)
             }
 
             StompCommand.UNSUBSCRIBE -> {
@@ -114,6 +115,11 @@ class WebSocketMessageInterceptor(
             userInfo = userInfo,
             sessionId = accessor.sessionId!!,
         )
+    }
+
+    private fun handleSubscribe(accessor: StompHeaderAccessor) {
+        val userInfo = socketAuthContext.userInfo
+            ?: throw CustomException(ErrorType.UNAUTHORIZED)
     }
 
     private fun handleDisconnect(accessor: StompHeaderAccessor) {

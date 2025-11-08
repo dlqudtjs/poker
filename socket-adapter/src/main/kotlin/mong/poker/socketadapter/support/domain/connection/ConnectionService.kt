@@ -1,8 +1,8 @@
-package mong.poker.socketapplication.connection
+package mong.poker.socketadapter.support.domain.connection
 
 import mong.poker.application.domain.player.service.PlayerService
 import mong.poker.core.domain.user.UserInfo
-import mong.poker.socketapplication.session.SessionManager
+import mong.poker.socketadapter.support.domain.session.SessionManager
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime

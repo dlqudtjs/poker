@@ -14,9 +14,10 @@ class WebSocketConfig(
 ) : WebSocketMessageBrokerConfigurer {
 
     override fun configureMessageBroker(registry: MessageBrokerRegistry) {
-        // /topic으로 시작하는 메시지는 메시지 브로커가 처리
+        // 클라이언트가 구독할 경로 prefix
         registry.enableSimpleBroker("/topic")
-        registry.setApplicationDestinationPrefixes("/app") // 클라이언트 → 서버 전송 prefix
+        // 클라이언트 → 서버 전송 prefix
+        registry.setApplicationDestinationPrefixes("/app")
     }
 
     override fun registerStompEndpoints(registry: StompEndpointRegistry) {

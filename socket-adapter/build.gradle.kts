@@ -6,7 +6,6 @@ plugins {
 }
 
 dependencies {
-    implementation(project(":socket-application"))
     implementation(project(":application"))
     implementation(project(":core"))
     implementation(project(":lib"))

@@ -1,4 +1,4 @@
-package mong.poker.socketapplication.session
+package mong.poker.socketadapter.support.domain.session
 
 import mong.poker.application.global.support.exception.CustomException
 import mong.poker.application.global.support.exception.ErrorType
