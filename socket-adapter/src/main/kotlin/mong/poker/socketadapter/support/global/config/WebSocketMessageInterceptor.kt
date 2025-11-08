@@ -57,8 +57,13 @@ class WebSocketMessageInterceptor(
             }
 
             StompCommand.DISCONNECT -> {
-                logger.info("DISCONNECT 명령어 처리")
-                handleDisconnect(accessor)
+                // 클라이언트에서 보낸 DISCONNECT 명령어만 처리
+                if (!accessor.getNativeHeader("receipt").isNullOrEmpty()) {
+                    logger.info("DISCONNECT 명령어 처리")
+                    handleDisconnect(accessor)
+                } else {
+                    // 서버에서 클라이언트로 보내는 응답은 무시함
+                }
             }
 
             else -> {

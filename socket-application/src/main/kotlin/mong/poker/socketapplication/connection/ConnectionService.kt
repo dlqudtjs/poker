@@ -21,7 +21,7 @@ class ConnectionService(
      * sessionId와 userId를 매핑하여 저장
      */
     fun connect(userInfo: UserInfo, sessionId: String) {
-        logger.info("사용자 연결: nickname=${userInfo.nickname}, sessionId=$sessionId")
+        logger.info("session 및 player 연결: nickname=${userInfo.nickname}, sessionId=$sessionId")
 
         // 기존 연결이 있으면 제거
         if (sessionManager.existsSessionByUserId(userInfo.id)) {
@@ -29,9 +29,15 @@ class ConnectionService(
             sessionManager.removeSessionByUserId(userInfo.id)
         }
 
+        // 새로운 플레이어 생성
         playerService.createPlayer(
             userInfo = userInfo,
             executedAt = LocalDateTime.now(),
+        )
+        // 세션 매핑 등록
+        sessionManager.registerSession(
+            userInfo = userInfo,
+            sessionId = sessionId,
         )
 
         logger.info("사용자 저장 완료: 총 ${playerService.activePlayerCount()}명 연결 중")
@@ -45,11 +51,11 @@ class ConnectionService(
         val sessionInfo = sessionManager.getSessionInfoBySessionId(sessionId) ?: return
 
         val player = playerService.getPlayerByUserId(sessionInfo.userInfo.id) ?: return
-        logger.info("사용자 연결 해제: nickname=${player.userInfo.nickname}")
+        logger.info("session 및 player 연결 해제: nickname=${player.userInfo.nickname}")
 
-        sessionManager.removeSessionByUserId(player.userInfo.id)
         playerService.removePlayerByUserId(player.userInfo.id)
+        sessionManager.removeSessionByUserId(player.userInfo.id)
 
-        logger.info("연결 해제 완료")
+        logger.info("session 및 player 연결 해제 완료")
     }
 }

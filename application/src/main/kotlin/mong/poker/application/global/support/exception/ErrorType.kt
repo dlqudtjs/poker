@@ -11,6 +11,13 @@ enum class ErrorType(
     INVALID_LOGIN_INFO(400, "로그인 정보가 올바르지 않습니다."),
     USER_NOT_FOUND(400, "유저를 찾을 수 없습니다."),
 
+    // player 관련
+    PLAYER_NOT_FOUND(400, "플레이어를 찾을 수 없습니다."),
+
+    // session 관련
+    // 세션 동기화 문제로 인해 발생하는 예외
+    SESSION_NOT_FOUND(400, "세션을 찾을 수 없습니다."),
+
     // room 관련
     ROOM_NOT_FOUND(400, "비밀번호가 일치하지 않습니다."),
 

@@ -1,5 +1,7 @@
 package mong.poker.application.domain.player.service
 
+import mong.poker.application.global.support.exception.CustomException
+import mong.poker.application.global.support.exception.ErrorType
 import mong.poker.core.domain.player.Player
 import mong.poker.core.domain.user.UserInfo
 import org.slf4j.LoggerFactory
@@ -39,12 +41,13 @@ class PlayerService {
     }
 
     fun removePlayerByUserId(userId: UUID) {
-        players.remove(userId)
+        val player = players.remove(userId) ?: throw CustomException(ErrorType.PLAYER_NOT_FOUND)
 
         logger.info(
             """
             Player 접속 종료
-            └─ Player ID   : $userId
+            ├─ Player ID   : $userId
+            └─ 닉네임       : ${player.userInfo.nickname} 
             """.trimIndent()
         )
     }
