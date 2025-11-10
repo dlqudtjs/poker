@@ -20,8 +20,9 @@ class WebSocketAuthArgumentResolver(
 
     override fun resolveArgument(
         parameter: MethodParameter,
-        message: Message<*>
+        message: Message<*>,
     ): UserInfo {
+
         return webSocketAuthContext.userInfo
             ?: throw CustomException(ErrorType.UNAUTHORIZED)
     }

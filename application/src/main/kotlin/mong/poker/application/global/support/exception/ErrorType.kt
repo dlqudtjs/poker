@@ -14,12 +14,19 @@ enum class ErrorType(
     // player 관련
     PLAYER_NOT_FOUND(400, "플레이어를 찾을 수 없습니다."),
 
+    // stomp 관련
+    INVALID_SUBSCRIPTION(400, "유효하지 않은 구독입니다."),
+    CANNOT_PROCESS_SUBSCRIPTION(400, "구독을 처리할 수 없습니다."),
+
     // session 관련
     // 세션 동기화 문제로 인해 발생하는 예외
     SESSION_NOT_FOUND(400, "세션을 찾을 수 없습니다."),
 
     // room 관련
     ROOM_NOT_FOUND(400, "비밀번호가 일치하지 않습니다."),
+
+    // message 관련
+    INVALID_MESSAGE_FORMAT(400, "메시지 형식이 올바르지 않습니다."),
 
     UNCAUGHT_EXCEPTION(500, "알 수 없는 오류입니다."),
     BAD_REQUEST(400, "올바르지 않은 요청입니다."),

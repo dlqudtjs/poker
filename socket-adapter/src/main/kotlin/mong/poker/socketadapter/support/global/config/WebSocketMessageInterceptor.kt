@@ -5,7 +5,9 @@ import mong.poker.application.global.support.exception.CustomException
 import mong.poker.application.global.support.exception.ErrorType
 import mong.poker.core.domain.user.UserInfo
 import mong.poker.socketadapter.support.domain.connection.ConnectionService
+import mong.poker.socketadapter.support.domain.connection.session.SessionManager
 import mong.poker.socketadapter.support.global.auth.WebSocketAuthContext
+import mong.poker.socketadapter.support.global.config.subscribe.SubscribeFactory
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpHeaders
 import org.springframework.messaging.Message
@@ -22,57 +24,66 @@ class WebSocketMessageInterceptor(
     private val socketAuthContext: WebSocketAuthContext,
     private val tokenManager: TokenManager,
     private val connectionService: ConnectionService,
+    private val subscribeFactory: SubscribeFactory,
+    private val sessionManager: SessionManager,
 ) : ChannelInterceptor {
 
     private val logger = LoggerFactory.getLogger(WebSocketMessageInterceptor::class.java)
 
     override fun preSend(message: Message<*>, channel: MessageChannel): Message<*>? {
-        val accessor = StompHeaderAccessor.wrap(message)
+        try {
 
-        if (isPassMessageType(accessor)) {
-            return message
-        }
+            val accessor = StompHeaderAccessor.wrap(message)
 
-        if (accessor.sessionId.isNullOrBlank()) {
-            logger.warn("세션 ID가 없습니다.")
-            throw CustomException(ErrorType.UNAUTHORIZED)
-        }
-
-        when (accessor.command) {
-            StompCommand.CONNECT -> {
-                logger.info("CONNECT 명령 처리")
-                handleConnect(accessor)
+            if (isPassMessageType(accessor)) {
+                return message
             }
 
-            StompCommand.SEND -> {
-                logger.info("SEND 명령어 처리")
+            val sessionId = accessor.sessionId
+
+            if (sessionId.isNullOrBlank()) {
+                logger.warn("세션 ID가 없습니다.")
+                throw CustomException(ErrorType.UNAUTHORIZED)
             }
 
-            StompCommand.SUBSCRIBE -> {
-                logger.info("SUBSCRIBE 명령어 처리")
-                handleSubscribe(accessor)
-            }
+            when (accessor.command) {
+                StompCommand.CONNECT -> {
+                    handleConnect(accessor)
+                }
 
-            StompCommand.UNSUBSCRIBE -> {
-                logger.info("UNSUBSCRIBE 명령어 처리")
-            }
+                StompCommand.SEND -> {
+                    setUserInfoToContext(accessor)
+                }
 
-            StompCommand.DISCONNECT -> {
-                // 클라이언트에서 보낸 DISCONNECT 명령어만 처리
-                if (!accessor.getNativeHeader("receipt").isNullOrEmpty()) {
-                    logger.info("DISCONNECT 명령어 처리")
-                    handleDisconnect(accessor)
-                } else {
-                    // 서버에서 클라이언트로 보내는 응답은 무시함
+                StompCommand.SUBSCRIBE -> {
+                    setUserInfoToContext(accessor)
+                    handleSubscribe(accessor)
+                }
+
+                StompCommand.UNSUBSCRIBE -> {
+                    setUserInfoToSessionAttributes(accessor)
+                }
+
+                StompCommand.DISCONNECT -> {
+                    // 클라이언트에서 보낸 DISCONNECT 명령어만 처리
+                    if (!accessor.getNativeHeader("receipt").isNullOrEmpty()) {
+                        handleDisconnect(accessor)
+                    } else {
+                        // 서버에서 클라이언트로 보내는 응답은 무시함
+                    }
+                }
+
+                else -> {
+                    logger.info("알 수 없는 명령어: ${accessor.command}")
+                    println(accessor)
                 }
             }
 
-            else -> {
-                logger.info("알 수 없는 명령어: ${accessor.command}")
-            }
+            return message
+        } catch (ex: Exception) {
+            logger.error("WebSocket 메시지 처리 중 오류 발생: ${ex.message}", ex)
+            throw ex
         }
-
-        return message
     }
 
     override fun postSend(message: Message<*>, channel: MessageChannel, sent: Boolean) {
@@ -120,6 +131,15 @@ class WebSocketMessageInterceptor(
     private fun handleSubscribe(accessor: StompHeaderAccessor) {
         val userInfo = socketAuthContext.userInfo
             ?: throw CustomException(ErrorType.UNAUTHORIZED)
+
+        val destination = accessor.destination
+            ?: throw CustomException(ErrorType.INVALID_SUBSCRIPTION)
+
+        // 구독 핸들러가 없으면 무시
+        val handler = subscribeFactory.getHandler(destination)
+            ?: throw CustomException(ErrorType.CANNOT_PROCESS_SUBSCRIPTION)
+
+        handler.handleSubscribe(destination, userInfo)
     }
 
     private fun handleDisconnect(accessor: StompHeaderAccessor) {
@@ -132,7 +152,21 @@ class WebSocketMessageInterceptor(
             SimpMessageType.CONNECT_ACK,
             SimpMessageType.DISCONNECT_ACK,
             SimpMessageType.HEARTBEAT,
+            SimpMessageType.MESSAGE,
             SimpMessageType.OTHER,
         )
+    }
+
+    private fun setUserInfoToContext(accessor: StompHeaderAccessor) {
+        val userInfo = sessionManager.getSessionInfoBySessionId(accessor.sessionId!!)?.userInfo
+            ?: throw CustomException(ErrorType.UNAUTHORIZED)
+        socketAuthContext.userInfo = userInfo
+        accessor.sessionAttributes?.put("userInfo", userInfo)
+    }
+
+    private fun setUserInfoToSessionAttributes(accessor: StompHeaderAccessor) {
+        val userInfo = sessionManager.getSessionInfoBySessionId(accessor.sessionId!!)?.userInfo
+            ?: throw CustomException(ErrorType.UNAUTHORIZED)
+        accessor.sessionAttributes?.put("userInfo", userInfo)
     }
 }
