@@ -1,105 +1,82 @@
 package mong.poker.core.domain.room
 
+import mong.poker.core.domain.player.Player
 import mong.poker.core.domain.room.command.CreateGameRoomCommand
 import mong.poker.core.domain.room.command.UpdateGameRoomCommand
 import mong.poker.core.domain.room.enums.GameState
+import mong.poker.core.domain.user.UserInfo
 import java.util.*
 import java.util.UUID.randomUUID
 
-class GameRoom(
-    val id: UUID,
-    private var roomName: String,
-    private var roomAccess: GameRoomAccess, // 게임방 공개 여부
-    private var gameRoomStatus: GameRoomStatus, // 게임방 상태
-    private var players: MutableList<UUID> = mutableListOf(), // 게임방에 참여한 플레이어 목록
-) {
+data class GameRoom(
+    override val id: UUID,
+    override var name: String,
+    override var roomAccess: GameRoomAccess,
+    override var maxCapacity: Int,
+    override val players: MutableSet<Player> = mutableSetOf(),
+    var owner: UserInfo,
+    val gameState: GameState = GameState.WAITING,
+    val gameRoomStatus: GameRoomStatus,
+) : Room(id, name, roomAccess, maxCapacity, players) {
     companion object {
         fun create(command: CreateGameRoomCommand): GameRoom {
             return GameRoom(
                 id = randomUUID(),
-                roomName = command.roomName,
+                name = command.roomName,
                 roomAccess = command.roomAccess,
+                maxCapacity = command.maxCapacity,
+                owner = command.userInfo,
                 gameRoomStatus = GameRoomStatus.create(
                     bbAmount = command.bbAmount,
                     sbAmount = command.sbAmount,
-                    maxPlayerCount = command.maxPlayerCount
+                    totalRounds = command.totalRounds,
                 )
             )
         }
     }
 
-    fun update(command: UpdateGameRoomCommand) {
-        this.roomName = command.roomName
+    fun update(
+        command: UpdateGameRoomCommand
+    ) {
+        this.name = command.roomName
         this.roomAccess = command.roomAccess
-        this.gameRoomStatus = this.gameRoomStatus.roomUpdate(
-            bbAmount = command.bbAmount,
-            sbAmount = command.sbAmount,
-            maxPlayerCount = command.maxPlayerCount
-        )
-    }
-
-    fun getRoomName(): String {
-        return roomName
-    }
-
-    fun getRoomAccess(): GameRoomAccess {
-        return roomAccess
-    }
-
-    fun getGameRoomStatus(): GameRoomStatus {
-        return gameRoomStatus
-    }
-
-    sealed class GameRoomAccess {
-        fun isPrivate(): Boolean {
-            return this is Private
-        }
-
-        object Public : GameRoomAccess()
-        data class Private(val password: String) : GameRoomAccess()
+        this.maxCapacity = command.maxCapacity
     }
 
     data class GameRoomStatus(
         private var bbAmount: Int,
         private var sbAmount: Int,
-        private var maxPlayerCount: Int,
-        private var gameState: GameState = GameState.WAITING,
-        private var totalRounds: Int = 0, // 총 진행된 라운드 수
-        private var currentRound: GameRound? = null  // 현재 진행 중인 라운드
+        private var totalRounds: Int = 0, // 총 진행할 라운드 수
     ) {
         companion object {
             fun create(
                 bbAmount: Int,
                 sbAmount: Int,
-                maxPlayerCount: Int
+                totalRounds: Int
             ) = GameRoomStatus(
                 bbAmount = bbAmount,
                 sbAmount = sbAmount,
-                maxPlayerCount = maxPlayerCount
+                totalRounds = totalRounds,
             )
         }
+
+        fun getBbAmount(): Int = bbAmount
+        fun getSbAmount(): Int = sbAmount
+        fun getTotalRounds(): Int = totalRounds
 
         // 게임방 상태 업데이트
         fun roomUpdate(
             bbAmount: Int,
             sbAmount: Int,
-            maxPlayerCount: Int
+            totalRounds: Int,
         ) = GameRoomStatus(
             bbAmount = bbAmount,
             sbAmount = sbAmount,
-            maxPlayerCount = maxPlayerCount,
+            totalRounds = totalRounds,
         )
-
-        fun getBbAmount(): Int {
-            return bbAmount
-        }
-
-        fun getSbAmount(): Int {
-            return sbAmount
-        }
-
-        fun getMaxPlayerCount(): Int {
-            return maxPlayerCount
-        }
     }
 }
+
+
+
+

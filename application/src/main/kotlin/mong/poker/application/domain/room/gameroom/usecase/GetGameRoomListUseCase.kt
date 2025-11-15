@@ -1,6 +1,6 @@
 package mong.poker.application.domain.room.gameroom.usecase
 
-import mong.poker.application.domain.room.gameroom.service.GameRoomService
+import mong.poker.application.domain.room.RoomManager
 import mong.poker.application.global.support.usecase.UseCase
 import org.springframework.stereotype.Component
 import java.time.LocalDateTime
@@ -8,22 +8,23 @@ import java.util.*
 
 @Component
 class GetGameRoomListUseCase(
-    private val gameRoomService: GameRoomService,
+    private val roomManager: RoomManager,
 ) : UseCase<Unit, GetGameRoomListUseCase.Response> {
 
     override fun execute(
         request: Unit,
         executedAt: LocalDateTime,
     ): Response {
-        val rooms = gameRoomService.getAllRooms().map { room ->
+        val rooms = roomManager.getAllGameRoom().map { room ->
             RoomInfo(
                 roomId = room.id,
-                roomName = room.getRoomName(),
-                maxUserCount = room.getGameRoomStatus().getMaxPlayerCount(),
-                isPrivate = room.getRoomAccess().isPrivate(),
-                bbAmount = room.getGameRoomStatus().getBbAmount(),
-                sbAmount = room.getGameRoomStatus().getSbAmount(),
-                currentPlayerCount = room.getGameRoomStatus().getMaxPlayerCount(),
+                roomName = room.name,
+                maxCapacity = room.maxCapacity,
+                isPrivate = room.roomAccess.isPrivate(),
+                bbAmount = room.gameRoomStatus.getSbAmount(),
+                sbAmount = room.gameRoomStatus.getBbAmount(),
+                totalRounds = room.gameRoomStatus.getTotalRounds(),
+                currentPlayerCount = room.players.size,
             )
         }
 
@@ -37,10 +38,11 @@ class GetGameRoomListUseCase(
     data class RoomInfo(
         val roomId: UUID,
         val roomName: String,
-        val maxUserCount: Int,
+        val maxCapacity: Int,
         val isPrivate: Boolean,
         val bbAmount: Int,
         val sbAmount: Int,
+        val totalRounds: Int,
         val currentPlayerCount: Int,
     )
 }

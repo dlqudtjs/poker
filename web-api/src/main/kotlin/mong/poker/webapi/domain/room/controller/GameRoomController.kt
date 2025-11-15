@@ -6,7 +6,7 @@ import mong.poker.application.domain.room.gameroom.usecase.CreateGameRoomUseCase
 import mong.poker.application.domain.room.gameroom.usecase.GetGameRoomListUseCase
 import mong.poker.application.domain.room.gameroom.usecase.UpdateGameRoomUseCase
 import mong.poker.core.domain.user.UserInfo
-import mong.poker.webapi.domain.room.controller.request.CreateRoomRequest
+import mong.poker.webapi.domain.room.controller.request.CreateGameRoomRequest
 import mong.poker.webapi.domain.room.controller.request.UpdateRoomRequest
 import mong.poker.webapi.global.auth.ApiRequiredAuth
 import mong.poker.webapi.global.response.ApiResponse
@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.*
 import java.util.*
 
 @RestController
-@RequestMapping("/api/v1/rooms")
-class RoomController(
+@RequestMapping("/api/v1/game-rooms")
+class GameRoomController(
     private val createGameRoomUseCase: CreateGameRoomUseCase,
     private val getGameRoomListUseCase: GetGameRoomListUseCase,
     private val updateGameRoomUseCase: UpdateGameRoomUseCase,
@@ -25,18 +25,19 @@ class RoomController(
 
     @Operation(summary = "게임 방 생성")
     @PostMapping
-    fun createRoom(
+    fun createGameRoom(
         @ApiRequiredAuth userInfo: UserInfo,
-        @RequestBody @Valid request: CreateRoomRequest
+        @RequestBody @Valid request: CreateGameRoomRequest
     ): ResponseEntity<ApiResponse<CreateGameRoomUseCase.Response>> {
         val response = createGameRoomUseCase.execute(
             request = CreateGameRoomUseCase.Request(
                 userInfo = userInfo,
                 roomName = request.title,
                 password = request.password,
-                maxUserCount = request.maxPlayerCount,
+                maxCapacity = request.maxCapacity,
                 bbAmount = request.bbAmount,
                 sbAmount = request.sbAmount,
+                totalRounds = request.maxCapacity,
             ),
             executedAt = java.time.LocalDateTime.now(),
         )
@@ -48,7 +49,7 @@ class RoomController(
 
     @Operation(summary = "게임 방 목록 조회")
     @GetMapping("/list")
-    fun getRoomList(): ResponseEntity<ApiResponse<GetGameRoomListUseCase.Response>> {
+    fun getGameRoomList(): ResponseEntity<ApiResponse<GetGameRoomListUseCase.Response>> {
         val response = getGameRoomListUseCase.execute(
             request = Unit,
             executedAt = java.time.LocalDateTime.now(),
@@ -59,7 +60,7 @@ class RoomController(
 
     @Operation(summary = "게임 방 수정")
     @PatchMapping("/{roomId}")
-    fun updateRoom(
+    fun updateGameRoom(
         @PathVariable roomId: UUID,
         @ApiRequiredAuth userInfo: UserInfo,
         @RequestBody @Valid request: UpdateRoomRequest
@@ -69,9 +70,10 @@ class RoomController(
                 roomId = roomId,
                 roomName = request.title,
                 password = request.password,
-                maxUserCount = request.maxPlayerCount,
+                maxCapacity = request.maxCapacity,
                 bbAmount = request.bbAmount,
                 sbAmount = request.sbAmount,
+                totalRounds = request.totalRounds,
                 userInfo = userInfo,
             ),
             executedAt = java.time.LocalDateTime.now(),

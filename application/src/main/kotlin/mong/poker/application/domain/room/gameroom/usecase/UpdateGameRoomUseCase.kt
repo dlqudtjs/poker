@@ -1,8 +1,8 @@
 package mong.poker.application.domain.room.gameroom.usecase
 
-import mong.poker.application.domain.room.gameroom.service.GameRoomService
+import mong.poker.application.domain.room.RoomManager
 import mong.poker.application.global.support.usecase.UseCase
-import mong.poker.core.domain.room.GameRoom
+import mong.poker.core.domain.room.Room
 import mong.poker.core.domain.room.command.UpdateGameRoomCommand
 import mong.poker.core.domain.user.UserInfo
 import org.springframework.stereotype.Component
@@ -11,7 +11,7 @@ import java.util.*
 
 @Component
 class UpdateGameRoomUseCase(
-    private val gameRoomService: GameRoomService,
+    private val roomManager: RoomManager,
 ) : UseCase<UpdateGameRoomUseCase.Request, UpdateGameRoomUseCase.Response> {
 
     override fun execute(
@@ -22,7 +22,7 @@ class UpdateGameRoomUseCase(
 
         val command = request.toCreateGameRoomCommand(gameRoomAccess)
 
-        val roomId = gameRoomService.updateRoom(command)
+        val roomId = roomManager.updateGameRoom(command)
 
         return Response(roomId = roomId)
     }
@@ -31,9 +31,10 @@ class UpdateGameRoomUseCase(
         val roomId: UUID,
         val roomName: String,
         val password: String?,
-        val maxUserCount: Int,
+        val maxCapacity: Int,
         val bbAmount: Int,
         val sbAmount: Int,
+        val totalRounds: Int,
         val userInfo: UserInfo,
     )
 
@@ -41,22 +42,23 @@ class UpdateGameRoomUseCase(
         val roomId: UUID,
     )
 
-    private fun Request.toGameRoomAccess(): GameRoom.GameRoomAccess {
+    private fun Request.toGameRoomAccess(): Room.GameRoomAccess {
         return if (this.password.isNullOrEmpty()) {
-            GameRoom.GameRoomAccess.Public
+            Room.GameRoomAccess.Public
         } else {
-            GameRoom.GameRoomAccess.Private(password = this.password)
+            Room.GameRoomAccess.Private(password = this.password)
         }
     }
 
-    private fun Request.toCreateGameRoomCommand(access: GameRoom.GameRoomAccess): UpdateGameRoomCommand {
+    private fun Request.toCreateGameRoomCommand(access: Room.GameRoomAccess): UpdateGameRoomCommand {
         return UpdateGameRoomCommand(
             roomId = this.roomId,
             roomName = this.roomName,
             roomAccess = access,
-            maxPlayerCount = this.maxUserCount,
+            maxCapacity = this.maxCapacity,
             bbAmount = this.bbAmount,
             sbAmount = this.sbAmount,
+            totalRounds = this.totalRounds,
             userInfo = this.userInfo,
         )
     }

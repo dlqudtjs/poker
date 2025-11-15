@@ -23,7 +23,8 @@ enum class ErrorType(
     SESSION_NOT_FOUND(400, "세션을 찾을 수 없습니다."),
 
     // room 관련
-    ROOM_NOT_FOUND(400, "비밀번호가 일치하지 않습니다."),
+    ROOM_NOT_FOUND(400, "방을 찾을 수 없습니다."),
+    INVALID_ROOM_OPERATION(400, "해당 방에서 허용되지 않는 작업입니다."),
 
     // message 관련
     INVALID_MESSAGE_FORMAT(400, "메시지 형식이 올바르지 않습니다."),

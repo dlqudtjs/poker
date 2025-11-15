@@ -4,9 +4,7 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
-import mong.poker.application.domain.room.gameroom.service.GameRoomService
 import mong.poker.application.domain.room.gameroom.usecase.CreateGameRoomUseCase
-import mong.poker.core.domain.room.GameRoom
 import mong.poker.core.domain.room.command.CreateGameRoomCommand
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
@@ -54,7 +52,7 @@ class CreateGameRoomUseCaseTest {
         verify(exactly = 1) { gameRoomService.createRoom(any()) }
 
         val capturedCommand = commandSlot.captured
-        assertEquals(GameRoom.GameRoomAccess.Public, capturedCommand.roomAccess)
+        assertEquals(BeforeGameRoom.GameRoomAccess.Public, capturedCommand.roomAccess)
         assertEquals(roomId, response.roomId)
     }
 
@@ -83,7 +81,7 @@ class CreateGameRoomUseCaseTest {
         verify(exactly = 1) { gameRoomService.createRoom(any()) }
 
         val capturedCommand = commandSlot.captured
-        assertEquals(GameRoom.GameRoomAccess.Public, capturedCommand.roomAccess)
+        assertEquals(BeforeGameRoom.GameRoomAccess.Public, capturedCommand.roomAccess)
         assertEquals(roomId, response.roomId)
     }
 
@@ -113,7 +111,7 @@ class CreateGameRoomUseCaseTest {
         verify(exactly = 1) { gameRoomService.createRoom(any()) }
 
         val capturedCommand = commandSlot.captured
-        assertEquals(GameRoom.GameRoomAccess.Private(password), capturedCommand.roomAccess)
+        assertEquals(BeforeGameRoom.GameRoomAccess.Private(password), capturedCommand.roomAccess)
         assertEquals(roomId, response.roomId)
     }
 
@@ -143,7 +141,7 @@ class CreateGameRoomUseCaseTest {
         verify(exactly = 1) { gameRoomService.createRoom(any()) }
 
         val capturedCommand = commandSlot.captured
-        assertEquals(GameRoom.GameRoomAccess.Private(password), capturedCommand.roomAccess)
+        assertEquals(BeforeGameRoom.GameRoomAccess.Private(password), capturedCommand.roomAccess)
         assertEquals(roomId, response.roomId)
     }
 
@@ -172,7 +170,7 @@ class CreateGameRoomUseCaseTest {
         // then
         val capturedCommand = commandSlot.captured
         assertEquals(request.roomName, capturedCommand.roomName)
-        assertEquals(GameRoom.GameRoomAccess.Private(password), capturedCommand.roomAccess)
+        assertEquals(BeforeGameRoom.GameRoomAccess.Private(password), capturedCommand.roomAccess)
         assertEquals(request.maxUserCount, capturedCommand.maxPlayerCount)
         assertEquals(request.bbAmount, capturedCommand.bbAmount)
         assertEquals(request.sbAmount, capturedCommand.sbAmount)

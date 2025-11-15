@@ -3,10 +3,7 @@ package mong.poker.application.domain.room.usecase
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import mong.poker.application.domain.room.gameroom.service.GameRoomService
 import mong.poker.application.domain.room.gameroom.usecase.GetGameRoomListUseCase
-import mong.poker.core.domain.room.GameRoom
-import mong.poker.core.domain.room.GameRoom.GameRoomStatus
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
@@ -200,10 +197,10 @@ class GetGameRoomListUseCaseTest {
         isPrivate: Boolean,
         bbAmount: Int,
         sbAmount: Int
-    ): GameRoom {
-        val mockRoom = mockk<GameRoom>()
+    ): BeforeGameRoom {
+        val mockRoom = mockk<BeforeGameRoom>()
         val mockGameRoomStatus = mockk<GameRoomStatus>()
-        val mockRoomAccess = mockk<GameRoom.GameRoomAccess>()
+        val mockRoomAccess = mockk<BeforeGameRoom.GameRoomAccess>()
 
         every { mockRoom.id } returns id
         every { mockRoom.getRoomName() } returns roomName

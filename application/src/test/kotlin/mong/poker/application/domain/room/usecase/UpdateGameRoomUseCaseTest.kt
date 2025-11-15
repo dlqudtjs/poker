@@ -4,9 +4,7 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
-import mong.poker.application.domain.room.gameroom.service.GameRoomService
 import mong.poker.application.domain.room.gameroom.usecase.UpdateGameRoomUseCase
-import mong.poker.core.domain.room.GameRoom
 import mong.poker.core.domain.room.command.UpdateGameRoomCommand
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
@@ -55,7 +53,7 @@ class UpdateGameRoomUseCaseTest {
         val capturedCommand = commandSlot.captured
         assertEquals(roomId, capturedCommand.roomId)
         assertEquals("수정된 공개 방", capturedCommand.roomName)
-        assertEquals(GameRoom.GameRoomAccess.Public, capturedCommand.roomAccess)
+        assertEquals(BeforeGameRoom.GameRoomAccess.Public, capturedCommand.roomAccess)
         assertEquals(8, capturedCommand.maxPlayerCount)
         assertEquals(2000, capturedCommand.bbAmount)
         assertEquals(1000, capturedCommand.sbAmount)
@@ -87,7 +85,7 @@ class UpdateGameRoomUseCaseTest {
         verify(exactly = 1) { gameRoomService.updateRoom(any()) }
 
         val capturedCommand = commandSlot.captured
-        assertEquals(GameRoom.GameRoomAccess.Public, capturedCommand.roomAccess)
+        assertEquals(BeforeGameRoom.GameRoomAccess.Public, capturedCommand.roomAccess)
         assertEquals(roomId, response.roomId)
     }
 
@@ -118,7 +116,7 @@ class UpdateGameRoomUseCaseTest {
         val capturedCommand = commandSlot.captured
         assertEquals(roomId, capturedCommand.roomId)
         assertEquals("수정된 비밀 방", capturedCommand.roomName)
-        assertEquals(GameRoom.GameRoomAccess.Private(password), capturedCommand.roomAccess)
+        assertEquals(BeforeGameRoom.GameRoomAccess.Private(password), capturedCommand.roomAccess)
         assertEquals(4, capturedCommand.maxPlayerCount)
         assertEquals(5000, capturedCommand.bbAmount)
         assertEquals(2500, capturedCommand.sbAmount)
@@ -228,7 +226,7 @@ class UpdateGameRoomUseCaseTest {
 
         // then
         val capturedCommand = commandSlot.captured
-        assertEquals(GameRoom.GameRoomAccess.Private(newPassword), capturedCommand.roomAccess)
+        assertEquals(BeforeGameRoom.GameRoomAccess.Private(newPassword), capturedCommand.roomAccess)
         assertEquals(roomId, response.roomId)
     }
 
@@ -254,7 +252,7 @@ class UpdateGameRoomUseCaseTest {
 
         // then
         val capturedCommand = commandSlot.captured
-        assertEquals(GameRoom.GameRoomAccess.Public, capturedCommand.roomAccess)
+        assertEquals(BeforeGameRoom.GameRoomAccess.Public, capturedCommand.roomAccess)
         assertEquals(roomId, response.roomId)
     }
 
@@ -282,7 +280,7 @@ class UpdateGameRoomUseCaseTest {
         val capturedCommand = commandSlot.captured
         assertEquals(roomId, capturedCommand.roomId)
         assertEquals("완전한 수정 테스트 방", capturedCommand.roomName)
-        assertEquals(GameRoom.GameRoomAccess.Private("testPassword"), capturedCommand.roomAccess)
+        assertEquals(BeforeGameRoom.GameRoomAccess.Private("testPassword"), capturedCommand.roomAccess)
         assertEquals(8, capturedCommand.maxPlayerCount)
         assertEquals(3000, capturedCommand.bbAmount)
         assertEquals(1500, capturedCommand.sbAmount)
