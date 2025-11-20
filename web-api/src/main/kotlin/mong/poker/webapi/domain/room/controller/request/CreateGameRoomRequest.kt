@@ -1,6 +1,7 @@
 package mong.poker.webapi.domain.room.controller.request
 
 import jakarta.validation.constraints.Max
+import jakarta.validation.constraints.Min
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.NotNull
 
@@ -14,6 +15,6 @@ data class CreateGameRoomRequest(
     val bbAmount: Int,
     @field:NotNull(message = "스몰 블라인드는 필수값 입니다.")
     val sbAmount: Int,
-    @field:NotNull(message = "총 라운드는 필수값 입니다.")
+    @field:Min(1, message = "총 라운드는 최소 1 이상이어야 합니다.")
     val totalRounds: Int,
 )
