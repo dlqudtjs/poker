@@ -29,10 +29,9 @@ class RoomManager(
     }
 
     fun createGameRoom(command: CreateGameRoomCommand): UUID {
-        val roomId = UUID.randomUUID()
         val gameRoom = GameRoom.create(command)
 
-        rooms[roomId] = gameRoom
+        rooms[gameRoom.id] = gameRoom
         gameRoom.joinUser(command.userInfo.id)
 
         logger.info(
@@ -44,7 +43,7 @@ class RoomManager(
             """.trimIndent()
         )
 
-        return roomId
+        return gameRoom.id
     }
 
     fun updateGameRoom(command: UpdateGameRoomCommand): UUID {
