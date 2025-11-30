@@ -1,9 +1,9 @@
 package mong.poker.application.domain.player.service
 
-import mong.poker.application.global.support.exception.CustomException
-import mong.poker.application.global.support.exception.ErrorType
+import mong.poker.application.domain.player.error.PlayerErrorType
 import mong.poker.core.domain.player.Player
 import mong.poker.core.domain.user.UserInfo
+import mong.poker.core.exception.CustomException
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
@@ -41,7 +41,7 @@ class PlayerService {
     }
 
     fun removePlayerByUserId(userId: UUID) {
-        val player = players.remove(userId) ?: throw CustomException(ErrorType.PLAYER_NOT_FOUND)
+        val player = players.remove(userId) ?: throw CustomException(PlayerErrorType.PLAYER_NOT_FOUND)
 
         logger.info(
             """

@@ -1,7 +1,7 @@
 package mong.poker.webapi.global.response
 
-import mong.poker.application.global.support.exception.CustomException
-import mong.poker.application.global.support.exception.ErrorType
+import mong.poker.core.exception.CustomException
+import mong.poker.core.exception.ErrorType
 
 /**
  * API 의 일관된 응답을 주기 위한 클래스

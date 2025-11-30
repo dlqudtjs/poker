@@ -4,7 +4,9 @@ import mong.poker.core.domain.player.Player
 import mong.poker.core.domain.room.command.CreateGameRoomCommand
 import mong.poker.core.domain.room.command.UpdateGameRoomCommand
 import mong.poker.core.domain.room.enums.GameState
+import mong.poker.core.domain.room.error.RoomErrorType
 import mong.poker.core.domain.user.UserInfo
+import mong.poker.core.exception.CustomException
 import java.util.*
 import java.util.UUID.randomUUID
 
@@ -35,9 +37,11 @@ data class GameRoom(
         }
     }
 
-    fun update(
-        command: UpdateGameRoomCommand
-    ) {
+    fun update(command: UpdateGameRoomCommand) {
+        if (this.owner == command.userInfo) {
+            throw CustomException(RoomErrorType.NOT_ROOM_HOST)
+        }
+
         this.name = command.roomName
         this.roomAccess = command.roomAccess
         this.maxCapacity = command.maxCapacity

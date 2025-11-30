@@ -1,8 +1,8 @@
 package mong.poker.webapi.global.exception
 
 import jakarta.servlet.http.HttpServletResponse
-import mong.poker.application.global.support.exception.CustomException
-import mong.poker.application.global.support.exception.ErrorType
+import mong.poker.core.exception.CommonErrorCode
+import mong.poker.core.exception.CustomException
 import mong.poker.webapi.global.util.ExceptionUtil
 import org.apache.logging.log4j.LogManager
 
@@ -30,7 +30,7 @@ object FailureHandler {
                 log.error(throwable.stackTraceToString())
                 ExceptionUtil.writeErrorJson(
                     response = response,
-                    errorType = ErrorType.UNCAUGHT_EXCEPTION,
+                    errorType = CommonErrorCode.UNCAUGHT_EXCEPTION,
                 )
             }
         }

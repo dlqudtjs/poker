@@ -1,12 +1,13 @@
 package mong.poker.socketadapter.support.global.config
 
 import TokenManager
-import mong.poker.application.global.support.exception.CustomException
-import mong.poker.application.global.support.exception.ErrorType
 import mong.poker.core.domain.user.UserInfo
+import mong.poker.core.exception.CommonErrorCode
+import mong.poker.core.exception.CustomException
 import mong.poker.socketadapter.support.domain.connection.ConnectionService
 import mong.poker.socketadapter.support.domain.connection.session.SessionManager
 import mong.poker.socketadapter.support.global.auth.WebSocketAuthContext
+import mong.poker.socketadapter.support.global.config.error.SocketConfigErrorType
 import mong.poker.socketadapter.support.global.config.subscribe.SubscribeFactory
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpHeaders
@@ -43,7 +44,7 @@ class WebSocketMessageInterceptor(
 
             if (sessionId.isNullOrBlank()) {
                 logger.warn("세션 ID가 없습니다.")
-                throw CustomException(ErrorType.UNAUTHORIZED)
+                throw CustomException(CommonErrorCode.UNAUTHORIZED)
             }
 
             when (accessor.command) {
@@ -117,7 +118,7 @@ class WebSocketMessageInterceptor(
 
         if (userInfo == null) {
             logger.warn("${accessor.command}: 유효하지 않은 토큰입니다.")
-            throw CustomException(ErrorType.UNAUTHORIZED)
+            throw CustomException(CommonErrorCode.UNAUTHORIZED)
         }
 
         socketAuthContext.userInfo = userInfo
@@ -130,14 +131,14 @@ class WebSocketMessageInterceptor(
 
     private fun handleSubscribe(accessor: StompHeaderAccessor) {
         val userInfo = socketAuthContext.userInfo
-            ?: throw CustomException(ErrorType.UNAUTHORIZED)
+            ?: throw CustomException(CommonErrorCode.UNAUTHORIZED)
 
         val destination = accessor.destination
-            ?: throw CustomException(ErrorType.INVALID_SUBSCRIPTION)
+            ?: throw CustomException(SocketConfigErrorType.INVALID_SUBSCRIPTION)
 
         // 구독 핸들러가 없으면 무시
         val handler = subscribeFactory.getHandler(destination)
-            ?: throw CustomException(ErrorType.CANNOT_PROCESS_SUBSCRIPTION)
+            ?: throw CustomException(SocketConfigErrorType.CANNOT_PROCESS_SUBSCRIPTION)
 
         handler.handleSubscribe(destination, userInfo)
     }
@@ -159,14 +160,14 @@ class WebSocketMessageInterceptor(
 
     private fun setUserInfoToContext(accessor: StompHeaderAccessor) {
         val userInfo = sessionManager.getSessionInfoBySessionId(accessor.sessionId!!)?.userInfo
-            ?: throw CustomException(ErrorType.UNAUTHORIZED)
+            ?: throw CustomException(CommonErrorCode.UNAUTHORIZED)
         socketAuthContext.userInfo = userInfo
         accessor.sessionAttributes?.put("userInfo", userInfo)
     }
 
     private fun setUserInfoToSessionAttributes(accessor: StompHeaderAccessor) {
         val userInfo = sessionManager.getSessionInfoBySessionId(accessor.sessionId!!)?.userInfo
-            ?: throw CustomException(ErrorType.UNAUTHORIZED)
+            ?: throw CustomException(CommonErrorCode.UNAUTHORIZED)
         accessor.sessionAttributes?.put("userInfo", userInfo)
     }
 }

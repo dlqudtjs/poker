@@ -2,7 +2,7 @@ package mong.poker.webapi.global.util
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import jakarta.servlet.http.HttpServletResponse
-import mong.poker.application.global.support.exception.ErrorType
+import mong.poker.core.exception.ErrorType
 import mong.poker.webapi.global.response.ApiResponse
 import org.springframework.http.MediaType.APPLICATION_JSON_VALUE
 import java.nio.charset.StandardCharsets

@@ -4,9 +4,9 @@ import TokenManager
 import jakarta.annotation.PostConstruct
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
-import mong.poker.application.global.support.exception.CustomException
-import mong.poker.application.global.support.exception.ErrorType
 import mong.poker.core.domain.user.UserInfo
+import mong.poker.core.exception.CommonErrorCode
+import mong.poker.core.exception.CustomException
 import mong.poker.webapi.global.exception.FailureHandler
 import org.springframework.http.HttpMethod
 import org.springframework.stereotype.Component
@@ -51,7 +51,7 @@ class AuthInterceptor(
 
         val userInfo = extractUserFromJwt(request)
         if (userInfo == null) {
-            FailureHandler.handleFailure(CustomException(ErrorType.UNAUTHORIZED), response)
+            FailureHandler.handleFailure(CustomException(CommonErrorCode.UNAUTHORIZED), response)
             return false
         }
 

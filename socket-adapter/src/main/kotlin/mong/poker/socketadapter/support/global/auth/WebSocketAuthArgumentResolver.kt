@@ -1,8 +1,8 @@
 package mong.poker.socketadapter.support.global.auth
 
-import mong.poker.application.global.support.exception.CustomException
-import mong.poker.application.global.support.exception.ErrorType
 import mong.poker.core.domain.user.UserInfo
+import mong.poker.core.exception.CommonErrorCode
+import mong.poker.core.exception.CustomException
 import org.springframework.core.MethodParameter
 import org.springframework.messaging.Message
 import org.springframework.messaging.handler.invocation.HandlerMethodArgumentResolver
@@ -24,6 +24,6 @@ class WebSocketAuthArgumentResolver(
     ): UserInfo {
 
         return webSocketAuthContext.userInfo
-            ?: throw CustomException(ErrorType.UNAUTHORIZED)
+            ?: throw CustomException(CommonErrorCode.UNAUTHORIZED)
     }
 }

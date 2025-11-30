@@ -1,10 +1,10 @@
 package mong.poker.application.domain.user.usecase
 
 import mong.poker.application.domain.auth.service.PasswordAccountService
+import mong.poker.application.domain.user.error.UserErrorType
 import mong.poker.application.domain.user.service.UserService
-import mong.poker.application.global.support.exception.CustomException
-import mong.poker.application.global.support.exception.ErrorType
 import mong.poker.application.global.support.usecase.UseCase
+import mong.poker.core.exception.CustomException
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Propagation
 import org.springframework.transaction.annotation.Transactional
@@ -23,11 +23,11 @@ class SignUpUseCase(
         executedAt: LocalDateTime,
     ): Response {
         if (passwordAccountService.existByAccountId(request.accountId)) {
-            throw CustomException(ErrorType.DUPLICATED_ACCOUNT_ID)
+            throw CustomException(UserErrorType.DUPLICATED_ACCOUNT_ID)
         }
 
         if (userService.existByNickname(request.nickname)) {
-            throw CustomException(ErrorType.DUPLICATED_NICKNAME)
+            throw CustomException(UserErrorType.DUPLICATED_NICKNAME)
         }
 
         val user = userService.create(

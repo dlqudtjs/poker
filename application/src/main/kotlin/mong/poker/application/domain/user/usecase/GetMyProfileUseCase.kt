@@ -1,9 +1,9 @@
 package mong.poker.application.domain.user.usecase
 
+import mong.poker.application.domain.user.error.UserErrorType
 import mong.poker.application.domain.user.service.UserService
-import mong.poker.application.global.support.exception.CustomException
-import mong.poker.application.global.support.exception.ErrorType
 import mong.poker.application.global.support.usecase.UseCase
+import mong.poker.core.exception.CustomException
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Propagation
 import org.springframework.transaction.annotation.Transactional
@@ -21,7 +21,7 @@ class GetMyProfileUseCase(
         executedAt: LocalDateTime,
     ): Response {
         val user = userService.getById(request.userId)
-            ?: throw CustomException(ErrorType.USER_NOT_FOUND)
+            ?: throw CustomException(UserErrorType.USER_NOT_FOUND)
 
         return Response(
             nickname = user.getNickname()

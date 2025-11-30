@@ -2,10 +2,10 @@ package mong.poker.application.domain.user.usecase
 
 import TokenManager
 import mong.poker.application.domain.auth.service.PasswordAccountService
-import mong.poker.application.global.support.exception.CustomException
-import mong.poker.application.global.support.exception.ErrorType
+import mong.poker.application.domain.user.error.UserErrorType
 import mong.poker.application.global.support.usecase.UseCase
 import mong.poker.core.domain.user.User
+import mong.poker.core.exception.CustomException
 import mong.poker.lib.encrypt.PasswordEncoder
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Propagation
@@ -25,10 +25,10 @@ class SignInUseCase(
         executedAt: LocalDateTime,
     ): Response {
         val account = passwordAccountService.getAccountByAccountId(request.accountId)
-            ?: throw CustomException(ErrorType.INVALID_LOGIN_INFO)
+            ?: throw CustomException(UserErrorType.INVALID_LOGIN_INFO)
 
         if (!passwordEncoder.matches(request.password, account.getPassword())) {
-            throw CustomException(ErrorType.INVALID_LOGIN_INFO)
+            throw CustomException(UserErrorType.INVALID_LOGIN_INFO)
         }
 
         return Response(token = createAuthToken(account.getUser(), executedAt))

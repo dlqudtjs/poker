@@ -1,8 +1,8 @@
 package mong.poker.socketadapter.support.domain.connection.session
 
-import mong.poker.application.global.support.exception.CustomException
-import mong.poker.application.global.support.exception.ErrorType
 import mong.poker.core.domain.user.UserInfo
+import mong.poker.core.exception.CustomException
+import mong.poker.socketadapter.support.domain.connection.error.SessionErrorType
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import java.time.Instant
@@ -51,7 +51,7 @@ class SessionManager {
         if (sessionId != null) {
             userToSession.remove(userId)
             val sessionMetaData = sessionMetadata.remove(sessionId)
-                ?: throw CustomException(ErrorType.SESSION_NOT_FOUND)
+                ?: throw CustomException(SessionErrorType.SESSION_NOT_FOUND)
 
             logger.info(
                 """

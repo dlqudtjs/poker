@@ -1,8 +1,8 @@
 package mong.poker.webapi.global.auth
 
-import mong.poker.application.global.support.exception.CustomException
-import mong.poker.application.global.support.exception.ErrorType
 import mong.poker.core.domain.user.UserInfo
+import mong.poker.core.exception.CommonErrorCode
+import mong.poker.core.exception.CustomException
 import org.springframework.core.MethodParameter
 import org.springframework.stereotype.Component
 import org.springframework.web.bind.support.WebDataBinderFactory
@@ -29,5 +29,5 @@ class AuthArgumentResolver(
         mavContainer: ModelAndViewContainer?,
         webRequest: NativeWebRequest,
         binderFactory: WebDataBinderFactory?,
-    ): UserInfo? = authContext.userInfo ?: throw CustomException(ErrorType.UNAUTHORIZED)
+    ): UserInfo? = authContext.userInfo ?: throw CustomException(CommonErrorCode.UNAUTHORIZED)
 }

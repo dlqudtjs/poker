@@ -1,4 +1,4 @@
-package mong.poker.application.global.support.exception
+package mong.poker.core.exception
 
 data class CustomException(
     val errorType: ErrorType,

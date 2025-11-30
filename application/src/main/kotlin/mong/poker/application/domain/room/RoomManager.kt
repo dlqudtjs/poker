@@ -1,14 +1,14 @@
 package mong.poker.application.domain.room
 
 import mong.poker.application.domain.player.service.PlayerService
-import mong.poker.application.global.support.exception.CustomException
-import mong.poker.application.global.support.exception.ErrorType
+import mong.poker.application.domain.room.error.RoomErrorType
 import mong.poker.core.domain.player.Player
 import mong.poker.core.domain.room.GameRoom
 import mong.poker.core.domain.room.LobbyRoom
 import mong.poker.core.domain.room.Room
 import mong.poker.core.domain.room.command.CreateGameRoomCommand
 import mong.poker.core.domain.room.command.UpdateGameRoomCommand
+import mong.poker.core.exception.CustomException
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import java.util.*
@@ -47,10 +47,10 @@ class RoomManager(
     }
 
     fun updateGameRoom(command: UpdateGameRoomCommand): UUID {
-        val room = rooms[command.roomId] ?: throw CustomException(ErrorType.ROOM_NOT_FOUND)
+        val room = rooms[command.roomId] ?: throw CustomException(RoomErrorType.ROOM_NOT_FOUND)
 
         when (room) {
-            is LobbyRoom -> throw CustomException(ErrorType.INVALID_ROOM_OPERATION)
+            is LobbyRoom -> throw CustomException(RoomErrorType.INVALID_ROOM_OPERATION)
             is GameRoom -> room.update(command)
         }
 
@@ -63,7 +63,7 @@ class RoomManager(
 
     private fun Room.joinUser(userId: UUID) {
         val player = playerService.getPlayerByUserId(userId)
-            ?: throw CustomException(ErrorType.PLAYER_NOT_FOUND)
+            ?: throw CustomException(RoomErrorType.PLAYER_NOT_FOUND)
 
         this.players.add(player)
         userLocationMap[player] = this

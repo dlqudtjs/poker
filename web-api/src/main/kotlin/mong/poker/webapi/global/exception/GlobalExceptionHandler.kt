@@ -1,7 +1,7 @@
 package mong.poker.webapi.global.exception
 
-import mong.poker.application.global.support.exception.CustomException
-import mong.poker.application.global.support.exception.ErrorType
+import mong.poker.core.exception.CommonErrorCode
+import mong.poker.core.exception.CustomException
 import mong.poker.webapi.global.response.ApiResponse
 import org.apache.logging.log4j.LogManager
 import org.springframework.http.HttpStatus
@@ -29,7 +29,7 @@ class GlobalExceptionHandler {
         printErrorMessage(e)
 
         val response = ApiResponse.error<Unit>(
-            errorType = ErrorType.UNCAUGHT_EXCEPTION,
+            errorType = CommonErrorCode.UNCAUGHT_EXCEPTION,
         )
 
         return ResponseEntity
@@ -78,7 +78,7 @@ class GlobalExceptionHandler {
         printErrorMessage(ex)
 
         val response = ApiResponse.error<Unit>(
-            errorType = ErrorType.BAD_REQUEST,
+            errorType = CommonErrorCode.BAD_REQUEST,
         )
 
         return ResponseEntity
@@ -93,7 +93,7 @@ class GlobalExceptionHandler {
     ): ResponseEntity<ApiResponse.Error<Unit>> {
         printErrorMessage(ex)
         val response = ApiResponse.error<Unit>(
-            errorType = ErrorType.NOT_FOUND,
+            errorType = CommonErrorCode.NOT_FOUND,
         )
 
         return ResponseEntity
